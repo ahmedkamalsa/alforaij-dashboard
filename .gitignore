@@ -1,33 +1,28 @@
-# Python/cache
+# بالعربي والإنجليزي — ملفات حساسة وبيانات مؤقتة
+# Sensitive files & temporary data — Arabic & English
+
+# ============================================================
+# SENSITIVE — secrets / keys / credentials
+# حساسة — مفاتيح وبيانات اعتماد
+# ============================================================
+.env
+
+# ============================================================
+# TEMPORARY — generated during development
+# مؤقتة — تُنشأ أثناء التطوير وتُعاد إنشاؤها تلقائياً
+# ============================================================
+supabase/.temp/
+supabase_data/
 __pycache__/
-*.py[cod]
+*.pyc
+*.pyo
 .pytest_cache/
-agent/.image_cache/
+*.egg-info/
+dist/
+build/
 
-# Local virtual environments
-.venv/
-venv/
-
-# Generated report/output archives and temporary files
-agent/output/
-*.zip
-*.rar
-~$*
-
-# Prompt/one-off local working files not needed for hosted dashboard
-MASTER_PROMPT_COMPARE_AGENTS_AR.md
-agent/agent.json
-agent/README.md
-agent/run_agent.py
-agent/system_prompt.md
-agent/build_director_actual_request.py
-agent/build_final_delivery_for_manager.py
-
-# Local editor/system files
-.DS_Store
-Thumbs.db
-
-# Keep the deployable static site in git.
-!site/
-!site/**
-site/chrome-preview-profile/
+# ============================================================
+# DO NOT COMMIT — large data files
+# لا تُرفع — ملفات بيانات كبيرة (يتم مزامنتها عبر sync منفصل)
+# ============================================================
+static-data/*

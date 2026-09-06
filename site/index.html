@@ -57,7 +57,60 @@
         <div class="status" id="healthStatus">الكل 1,218 | الفريج 182 | السوق 1,036 — قاعدة البيانات: متصلة</div>
       </div>
     </div>
+    <div class="top-metrics-row">
+      <div class="top-metric">
+        <span class="top-metric-value" id="totalAdsMetric">1,218</span>
+        <span class="top-metric-label">إعلان</span>
+      </div>
+      <div class="top-metric">
+        <span class="top-metric-value" id="opportunitiesMetric">58</span>
+        <span class="top-metric-label">فرصة</span>
+      </div>
+      <div class="top-metric">
+        <span class="top-metric-value" id="evaluatedMetric">431</span>
+        <span class="top-metric-label">دخلت التقييم</span>
+      </div>
+      <div class="top-metric">
+        <span class="top-metric-value" id="directMetric">1,050</span>
+        <span class="top-metric-label">مباشر</span>
+      </div>
+      <div class="top-metric">
+        <span class="top-metric-value" id="officeMetric">14</span>
+        <span class="top-metric-label">مكتب</span>
+      </div>
+    </div>
   </header>
+
+  <section class="quick-filters-strip">
+    <div class="quick-governorates">
+      <span class="quick-label">المحافظة:</span>
+      <button class="quick-chip active" data-gov="all">الكل</button>
+      <button class="quick-chip" data-gov="al-asima">العاصمة</button>
+      <button class="quick-chip" data-gov="hawally">حوالي</button>
+      <button class="quick-chip" data-gov="ahmadi">الاحمدي</button>
+      <button class="quick-chip" data-gov="farwaniya">الفروانية</button>
+      <button class="quick-chip" data-gov="mubarak">مبارك الكبير</button>
+      <button class="quick-chip" data-gov="jahra">الجهراء</button>
+    </div>
+    <div class="quick-types">
+      <span class="quick-label">النوع:</span>
+      <button class="quick-chip active" data-type="all">الكل</button>
+      <button class="quick-chip" data-type="شقة">شقة</button>
+      <button class="quick-chip" data-type="بيت">بيت</button>
+      <button class="quick-chip" data-type="أرض">أرض</button>
+      <button class="quick-chip" data-type="عمارة">عمارة</button>
+    </div>
+    <div class="quick-modes">
+      <span class="quick-label">النمط:</span>
+      <button class="quick-chip active" data-mode="all">الكل</button>
+      <button class="quick-chip" data-mode="مباشر">مباشر</button>
+      <button class="quick-chip" data-mode="مكتب">مكتب</button>
+    </div>
+    <div class="quick-actions">
+      <button id="quickSearchBtn" class="primary" type="button">طبق الفلاتر</button>
+      <button id="quickClearBtn" type="button">مسح</button>
+    </div>
+  </section>
 
   <main class="workspace">
     <section class="action-toolbar">
