@@ -1,1027 +1,505 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>نظام إدارة العقارات المتكامل — الفريج العقاري</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --primary:#1a365d;--secondary:#2c5282;--gold:#d69e2e;
-  --bg:#1a202c;--card:#2d3748;--text:#e2e8f0;--muted:#a0aec0;
-  --success:#38a169;--warn:#d69e2e;--danger:#e53e3e;--info:#3182ce;
-  --border:#4a5568;
-}
-body{font-family:'Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
-#loginPage{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a365d,#2d3748)}
-.login-card{background:var(--card);padding:40px;border-radius:16px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,0.4);border:1px solid var(--border)}
-.login-card h2{color:var(--gold);margin-bottom:8px;text-align:center}.login-card .sub{color:var(--muted);font-size:0.85rem;text-align:center;margin-bottom:25px}
-.form-group{margin-bottom:15px}
-.form-group label{display:block;color:var(--muted);font-size:0.8rem;margin-bottom:5px}
-.form-group input,.form-group select{width:100%;padding:12px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:0.9rem;outline:none}
-.form-group input:focus{border-color:var(--gold)}
-.login-error{background:rgba(229,62,62,0.1);border:1px solid var(--danger);color:var(--danger);padding:10px 14px;border-radius:8px;font-size:0.8rem;margin-bottom:15px;display:none}
-.btn{padding:12px 20px;border-radius:8px;border:none;cursor:pointer;font-size:0.9rem;font-weight:600;transition:all 0.2s;font-family:inherit}
-.btn-primary{background:linear-gradient(135deg,var(--gold),#b7791f);color:#1a202c}
-.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(214,158,46,0.3)}
-.btn-secondary{background:var(--card);color:var(--text);border:1px solid var(--border)}
-.btn-secondary:hover{background:#5a6577}
-.btn-sm{padding:6px 12px;font-size:0.75rem}
-#dashboard{display:none;flex:1}
-.d-header{background:linear-gradient(135deg,var(--primary),var(--secondary));padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid var(--gold)}
-.d-header .logo{display:flex;align-items:center;gap:10px}
-.d-header .logo h1{font-size:1.1rem;color:var(--gold);font-weight:700}
-.d-header .user-info{display:flex;align-items:center;gap:15px}
-.role-badge{padding:4px 12px;border-radius:20px;font-size:0.7rem;font-weight:700;border:1px solid}
-.role-badge.boss{background:rgba(56,161,105,0.15);color:var(--success);border-color:var(--success)}
-.role-badge.admin{background:rgba(214,158,46,0.15);color:var(--warn);border-color:var(--warn)}
-.role-badge.employee{background:rgba(160,174,192,0.15);color:var(--muted);border-color:var(--border)}
-.d-body{display:flex;flex:1;overflow:hidden}
-.s-sidebar{width:240px;background:var(--card);padding:15px;display:flex;flex-direction:column;gap:4px;border-right:1px solid var(--border)}
-.s-sidebar .menu-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;color:var(--muted);transition:all 0.2s;font-size:0.85rem;border:1px solid transparent}
-.s-sidebar .menu-item:hover{background:rgba(214,158,46,0.06);color:var(--text)}
-.s-sidebar .menu-item.active{background:rgba(214,158,46,0.1);color:var(--gold);font-weight:600;border-color:var(--border)}
-.s-sidebar .menu-item .icon{font-size:1.1rem;width:24px;text-align:center}
-.s-sidebar .menu-item .badge{margin-left:auto;background:var(--primary);color:var(--gold);padding:2px 7px;border-radius:10px;font-size:0.65rem;font-weight:700}
-.s-content{flex:1;padding:18px;overflow-y:auto}
-.page-title{font-size:1.2rem;color:var(--gold);margin-bottom:5px;font-weight:700}
-.page-sub{color:var(--muted);font-size:0.8rem;margin-bottom:15px}
-.page{display:none}
-.page.active{display:block}
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px}
-.stat-card{background:var(--card);padding:16px;border-radius:10px;border:1px solid var(--border);position:relative;overflow:hidden}
-.stat-card .stat-icon{font-size:1.5rem;position:absolute;top:10px;left:12px;opacity:0.3}
-.stat-card .stat-value{font-size:1.6rem;font-weight:700;color:var(--gold);line-height:1.2}
-.stat-card .stat-label{color:var(--muted);font-size:0.7rem;margin-top:3px}
-.card{background:var(--card);border-radius:10px;padding:15px;margin-bottom:15px;border:1px solid var(--border)}
-.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.card-header h3{font-size:0.9rem;color:var(--text)}
-table{width:100%;border-collapse:collapse;font-size:0.8rem}
-th{background:var(--bg);color:var(--muted);padding:8px 10px;text-align:right;font-weight:600;border-bottom:1px solid var(--border)}
-td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
-tr:hover{background:rgba(214,158,46,0.04)}
-.text-gold{color:var(--gold);font-weight:600}
-.text-muted{color:var(--muted)}
-.text-success{color:var(--success)}
-.text-warn{color:var(--warn)}
-.text-danger{color:var(--danger);text-decoration:line-through}
-.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:0.65rem;font-weight:700}
-.badge-success{background:rgba(56,161,105,0.15);color:var(--success)}
-.badge-warn{background:rgba(214,158,46,0.15);color:var(--warn)}
-.badge-danger{background:rgba(229,62,62,0.15);color:var(--danger)}
-.badge-info{background:rgba(49,130,206,0.15);color:var(--info)}
-.badge-muted{background:rgba(160,174,192,0.15);color:var(--muted)}
-.chat-box{background:var(--card);border-radius:10px;border:1px solid var(--border);display:flex;flex-direction:column;height:calc(100vh - 200px);margin-bottom:15px}
-.chat-messages{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:10px}
-.chat-msg{max-width:75%;padding:10px 14px;border-radius:10px;font-size:0.85rem;line-height:1.5}
-.chat-msg.bot{background:var(--bg);border:1px solid var(--border);align-self:flex-start;color:var(--text)}
-.chat-msg.user{background:linear-gradient(135deg,var(--primary),var(--secondary));align-self:flex-end}
-.chat-msg .msg-head{font-size:0.65rem;color:var(--gold);margin-bottom:4px;display:flex;align-items:center;gap:6px}
-.chat-msg .msg-content{white-space:pre-wrap}
-.alert-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:var(--card);border-radius:8px;margin-bottom:8px;border-left:3px solid;font-size:0.8rem}
-.alert-item.alert-new{border-color:var(--success)}.alert-item.alert-price{border-color:var(--info)}.alert-item.alert-deal{border-color:var(--warn)}.alert-item.alert-system{border-color:var(--danger)}
-.alert-item .alert-icon{font-size:1.2rem}
-.alert-item .alert-text{flex:1}
-.alert-item .alert-time{color:var(--muted);font-size:0.65rem}
-.pipeline-stages{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px}
-.pipeline-stage{flex:1;min-width:150px;background:var(--card);border-radius:8px;padding:12px;border:1px solid var(--border);position:relative}
-.pipeline-stage .stage-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.pipeline-stage .stage-name{font-size:0.75rem;color:var(--muted);font-weight:600}
-.pipeline-stage .stage-count{font-size:1.2rem;font-weight:700;color:var(--gold)}
-.pipeline-stage.new{border-color:var(--success)}.pipeline-stage.lead{border-color:var(--info)}.pipeline-stage.negotiating{border-color:var(--warn)}.pipeline-stage.closed{border-color:var(--success)}.pipeline-stage.lost{border-color:var(--danger)}
-.rec-card{background:var(--card);border-radius:8px;padding:12px;margin-bottom:8px;border-left:3px solid var(--gold);display:flex;gap:10px}
-.rec-card .rec-score{font-size:1.4rem;font-weight:700;color:var(--gold);min-width:40px;text-align:center}
-.rec-card .rec-info{flex:1}
-.rec-card .rec-title{font-weight:600;margin-bottom:3px}
-.rec-card .rec-desc{font-size:0.75rem;color:var(--muted)}
-.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:1000}
-.modal{background:var(--card);border-radius:12px;padding:25px;width:90%;max-width:480px;border:1px solid var(--gold)}
-.modal h2{color:var(--gold);margin-bottom:12px}
-.modal .export-option{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;cursor:pointer;transition:all 0.2s}
-.modal .export-option:hover{border-color:var(--gold);background:rgba(214,158,46,0.06)}
-.modal .export-option .ex-icon{font-size:1.5rem}
-.modal .export-option .ex-info{flex:1}
-.modal .export-option .ex-title{font-weight:600}
-.modal .export-option .ex-desc{font-size:0.7rem;color:var(--muted)}
-.modal .close-btn{width:100%;padding:10px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;cursor:pointer;font-family:inherit;font-size:0.85rem}
-.modal .close-btn:hover{border-color:var(--danger);color:var(--danger)}
-.tracking-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:15px}
-.tracking-stat .ts-value{font-size:1.4rem;font-weight:700;color:var(--gold)}
-.tracking-stat .ts-label{font-size:0.7rem;color:var(--muted)}
-.tag{display:inline-block;padding:2px 6px;border-radius:4px;font-size:0.6rem;font-weight:600;background:rgba(214,158,46,0.1);color:var(--gold);margin-right:3px}
-.toast{position:fixed;bottom:20px;right:20px;padding:12px 20px;border-radius:8px;z-index:2000;font-size:0.85rem;display:none;animation:slideIn 0.3s ease}
-@keyframes slideIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
-.toast.success{background:var(--success);color:white}.toast.error{background:var(--danger);color:white}
-.toast.info{background:var(--info);color:white}
-@media print{.d-header,.s-sidebar,.chat-box,.no-print{display:none!important}.s-content{padding:0}body{background:white;color:black}.card{border:1px solid #ccc;box-shadow:none}th{background:#f0f0f0;color:#333}td{color:#333}}
-@media(max-width:768px){.s-sidebar{display:none}.d-body{flex-direction:column}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="منصة الفريج للبحث والتقييم العقاري وفرص المكسب المبنية على الأدلة والمصادر.">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/alforaij-official-symbol.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/alforaij-official-symbol.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <meta name="theme-color" content="#0F172A">
+  <title>منصة الفريج للفرص والتقييم العقاري</title>
+  <link rel="stylesheet" href="styles.css?v=20260809-evidence-suite">
+  <script src="config.js?v=20260809-evidence-suite"></script>
+  <script src="live-supabase-client.js?v=20260903-live"></script>
+  <script src="supabase-client.js?v=20260903-supabase"></script>
+  <script src="analysis-engine.js?v=20260903-analysis"></script>
 </head>
 <body>
-
-<!-- ===== LOGIN PAGE ===== -->
-<div id="loginPage">
-  <div class="login-card">
-    <h2>🔐 نظام إدارة العقارات المتكامل</h2>
-    <p class="sub">الفريج العقاري | إصدار 3.0 | ٣,٣٧٦ إعلان · ٥٠ تطوير</p>
-    <div id="loginError" class="login-error"></div>
-    <form id="loginForm" onsubmit="return handleLogin(event)">
-      <div class="form-group"><label>البريد الإلكتروني</label><input type="email" id="loginEmail" placeholder="example@domain.com" required></div>
-      <div class="form-group"><label>كلمة المرور</label><input type="password" id="loginPassword" placeholder="كلمة المرور" required></div>
-      <button type="submit" class="btn btn-primary" style="width:100%">تسجيل الدخول ←</button>
-    </form>
-    <p style="text-align:center;margin-top:20px;font-size:0.7rem;color:var(--muted)">📌 للاختبار: boss@alforaijboard.com / admin@alforaijboard.com / employee@alforaijboard.com — كلمة المرور: alforaij2026</p>
-  </div>
-</div>
-
-<!-- ===== DASHBOARD ===== -->
-<div id="dashboard">
-  <header class="d-header">
-    <div class="logo">
-      <h1>🏠 الفريج العقاري</h1>
-      <span style="font-size:0.7rem;color:var(--muted)">نظام إدارة متكامل v3.0</span>
-    </div>
-    <div class="user-info">
-      <span id="roleBadge" class="role-badge boss">👑 البوس</span>
-      <span id="userNameDisplay" style="font-weight:600;font-size:0.85rem">أحمد كمالسة</span>
-      <button class="btn btn-secondary btn-sm" onclick="logout()">تسجيل الخروج</button>
+  <header class="topbar">
+    <div class="hero-content">
+      <div class="hero-title">
+        <p class="eyebrow">بحث وتقييم وفرص عقارية مبنية على الأدلة</p>
+        <h1>منصة الفريج للفرص والتقييم العقاري</h1>
+        <p class="hero-copy">بحث موحد في بيانات الفريج والمصادر الخارجية، تقييم موثق بمصدر كل رقم، وفرص مكسب تربط العرض بالطلب والعملاء المحتملين.</p>
+        <div class="hero-actions">
+          <a class="hero-link" href="#board">فتح لوحة الأرقام والفرص</a>
+          <a class="hero-link hero-brand-link" href="https://front.alforaij.com/" target="_blank" rel="noreferrer" aria-label="فتح لوحة الفريج الأساسية — منصة الفريج الأصلية">
+            <span class="brand-badge"><img class="brand-badge-ic" src="assets/alforaij-official-symbol.png" alt=""></span>
+            <span class="brand-text">
+              <span class="brand-name">
+                <span class="bn-gold">شركة عبد العزيز سعود الفريج العقارية</span>
+                <span class="bn-blue">شركة عبد العزيز سعود الفريج العقارية</span>
+              </span>
+              <span class="brand-sub">ABDUL AZIZ SAUD AL-FURAJI REAL ESTATE COMPANY</span>
+            </span>
+            <svg class="brand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="logo-showcase" aria-label="شركة عبدالعزيز سعود الفريج العقارية">
+        <img class="brand-logo" src="assets/alforaij_logo.png" alt="شركة عبدالعزيز سعود الفريج العقارية">
+        <div class="status-row">
+          <div class="status-pill status-live" id="dbStatus">
+            <span class="status-dot"></span>
+            <span>جارٍ الاتصال بقاعدة البيانات الحية...</span>
+          </div>
+          <div class="status-pill status-ai" id="aiStatus">
+            <span class="status-dot"></span>
+            <span>تحليل ذكي: 가동</span>
+          </div>
+          <div class="status-pill status-sync" id="syncStatus">
+            <span class="status-dot"></span>
+            <span>آخر تحديث: -</span>
+          </div>
+        </div>
+        <div class="status" id="healthStatus">الكل 1,218 | الفريج 182 | السوق 1,036 — قاعدة البيانات: متصلة</div>
+      </div>
     </div>
   </header>
 
-  <div class="d-body">
-    <!-- SIDEBAR -->
-    <aside class="s-sidebar">
-      <div class="menu-item active" data-page="dashboard" onclick="switchPage('dashboard')"><span class="icon">📊</span> الرئيسية</div>
-      <div class="menu-item" data-page="ads" onclick="switchPage('ads')"><span class="icon">🏠</span> الإعلانات <span class="badge" id="adsCount">0</span></div>
-      <div class="menu-item" data-page="pipeline" onclick="switchPage('pipeline')"><span class="icon">🔄</span> خطوط الصفقات</div>
-      <div class="menu-item" data-page="market" onclick="switchPage('market')"><span class="icon">📈</span> تحليل السوق</div>
-      <div class="menu-item" data-page="alerts" onclick="switchPage('alerts')"><span class="icon">🔔</span> التنبيهات <span class="badge" id="alertCount">0</span></div>
-      <div class="menu-item" data-page="reports" onclick="switchPage('reports')"><span class="icon">📋</span> التقارير</div>
-      <div class="menu-item" data-page="chat" onclick="switchPage('chat')"><span class="icon">💬</span> المساعد الذكي</div>
-      <div class="menu-item" data-page="recommendations" onclick="switchPage('recommendations')"><span class="icon">⭐</span> التوصيات</div>
-      <div style="margin-top:auto;border-top:1px solid var(--border);padding-top:12px"><div style="font-size:0.65rem;color:var(--muted);margin-bottom:8px">صلاحياتك الحالية:</div><div id="permissionsList" style="font-size:0.65rem;color:var(--text);line-height:1.6"></div></div>
-    </aside>
+  <main class="workspace">
+    <section class="action-toolbar">
+      <div>
+        <strong>مركز البحث والتقييم</strong>
+        <span>اكتب الطلب، اختر نطاق المصدر، ثم راجع النتائج والمصادر والأدلة من نفس الصفحة.</span>
+      </div>
+      <div class="action-buttons">
+        <button id="toggleCustomSearchBtn" type="button">بحث مخصص</button>
+        <button id="clearChatBtn" type="button">مسح البحث</button>
+        <button id="downloadReportBtn" type="button">حفظ التقرير JSON</button>
+        <button id="downloadPdfBtn" class="primary" type="button">تنزيل تقرير PDF</button>
+      </div>
+    </section>
 
-    <main class="s-content">
-      <!-- الرئيسية -->
-      <div class="page active" id="page-dashboard">
-        <h2 class="page-title">📊 لوحة التحكم الرئيسية</h2>
-        <p class="page-sub">مرحباً بك في نظام إدارة العقارات المتكامل — <span id="lastUpdate" style="color:var(--gold)">—</span></p>
-        <div class="stats-grid" id="mainStats"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px">
-          <div class="card"><div class="card-header"><h3>🔔 أحدث التنبيهات</h3><button class="btn btn-secondary btn-sm" onclick="switchPage('alerts')">عرض الكل →</button></div><div id="recentAlerts"></div></div>
-          <div class="card"><div class="card-header"><h3>⭐ أبرز التوصيات</h3><button class="btn btn-secondary btn-sm" onclick="switchPage('recommendations')">عرض الكل →</button></div><div id="recentRecommendations"></div></div>
+    <section class="board-panel" id="board">
+      <div class="section-title">
+        <div>
+          <h2>لوحة الأرقام والعروض</h2>
+          <span>فلاتر الصفحة الرئيسية مرتبطة مباشرة بالبحث والتقييم والفرص.</span>
         </div>
-        <div class="card" id="quickActions"><div class="card-header"><h3>⚡ إجراءات سريعة</h3></div><div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-primary btn-sm" onclick="switchPage('ads')">🏠 عرض الإعلانات</button>
-          <button class="btn btn-primary btn-sm" onclick="switchPage('pipeline')">🔄 خطوط الصفقات</button>
-          <button class="btn btn-primary btn-sm" onclick="openExportModal()">📊 تصدير تقرير</button>
-          <button class="btn btn-primary btn-sm" onclick="openWhatsAppModal()">💬 إرسال عبر واتساب</button>
-          <button class="btn btn-secondary btn-sm" onclick="refreshData()">🔄 تحديث البيانات</button>
-        </div></div>
+        <span id="boardFilterSummary" class="filter-summary">كل السجلات</span>
       </div>
 
-      <!-- الإعلانات -->
-      <div class="page" id="page-ads">
-        <h2 class="page-title">🏠 قائمة الإعلانات</h2>
-        <p class="page-sub">كل الإعلانات من Supabase — <span style="color:var(--muted)">للبوس: تفاصيل كاملة + أرقام | لغير البوس: بدون أرقام تواصل</span></p>
-        <div class="card"><div class="card-header">
-          <h3>🔍 البحث والفلترة</h3>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <input type="text" id="adSearch" placeholder="بحث..." oninput="renderAds()" style="padding:8px 12px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;font-size:0.8rem;width:180px;outline:none">
-            <select id="adFilterType" onchange="renderAds()" style="padding:8px 12px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;font-size:0.8rem">
-              <option value="all">كل الأنواع</option><option value="للبيع">للبيع</option><option value="للإيجار">للإيجار</option><option value="للتبادل">للتبادل</option><option value="مطلوب للشراء">مطلوب للشراء</option><option value="مطلوب للإيجار">مطلوب للإيجار</option>
-            </select>
-            <select id="adFilterSrc" onchange="renderAds()" style="padding:8px 12px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;font-size:0.8rem">
-              <option value="all">كل المصادر</option>
-            </select>
-            <select id="adFilterSort" onchange="renderAds()" style="padding:8px 12px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;font-size:0.8rem">
-              <option value="newest">الأحدث أولاً</option><option value="oldest">الأقدم أولاً</option><option value="price-desc">الأغلى أولاً</option><option value="price-asc">الأرخص أولاً</option><option value="views">الأكثر مشاهدة</option>
-            </select>
+      <div class="board-filter-grid">
+        <label>قائمة جاهزة حسب الرقم
+          <select id="boardMetricFilter">
+            <option value="movement">حركة الدلال</option>
+            <option value="saleOffers">عروض للبيع</option>
+            <option value="buyRequests">طلبات شراء</option>
+            <option value="rentOffers">عروض الإيجار</option>
+            <option value="rentRequests">طلبات الإيجار</option>
+          </select>
+        </label>
+        <label>المحافظة - اكتب أو اختر
+          <input id="boardGovernorateFilter" list="boardGovernorates" placeholder="كل المحافظات" autocomplete="off">
+          <datalist id="boardGovernorates"></datalist>
+        </label>
+        <label>نوع المعاملة - اكتب أو اختر
+          <input id="boardTransactionFilter" list="boardTransactions" placeholder="كل المعاملات" autocomplete="off">
+          <datalist id="boardTransactions"></datalist>
+        </label>
+        <label>نوع العقار - اكتب أو اختر
+          <input id="boardPropertyTypeFilter" list="boardPropertyTypes" placeholder="كل أنواع العقار" autocomplete="off">
+          <datalist id="boardPropertyTypes"></datalist>
+        </label>
+        <label>نمط الإدراج
+          <select id="boardListingModeFilter">
+            <option value="">كل الأنماط</option>
+          </select>
+        </label>
+        <label>المنطقة - اكتب أو اختر
+          <input id="boardAreaFilter" list="boardAreas" placeholder="كل المناطق" autocomplete="off">
+          <datalist id="boardAreas"></datalist>
+        </label>
+        <div class="board-platform-field">
+          <span class="field-caption">منصات التقييم - الافتراضي كل المنصات</span>
+          <div class="platform-chips" id="boardPlatformFilter">
+            <label><input name="boardPlatform" type="checkbox" value="__all" checked> كل المنصات</label>
+            <label><input name="boardPlatform" type="checkbox" value="الفريج"> الفريج</label>
+            <label><input name="boardPlatform" type="checkbox" value="بوشملان"> بوشملان</label>
+            <label><input name="boardPlatform" type="checkbox" value="OpenSooq"> OpenSooq</label>
+            <label><input name="boardPlatform" type="checkbox" value="Mourjan"> Mourjan</label>
+            <label><input name="boardPlatform" type="checkbox" value="Q8Aqar"> Q8Aqar</label>
+            <label><input name="boardPlatform" type="checkbox" value="الحسبة"> الحسبة</label>
+            <label><input name="boardPlatform" type="checkbox" value="Sakan"> Sakan</label>
+            <label><input name="boardPlatform" type="checkbox" value="Waseet"> Waseet</label>
+            <label><input name="boardPlatform" type="checkbox" value="4Sale"> 4Sale</label>
           </div>
         </div>
-        <div style="overflow-x:auto"><table id="adsTable"><thead><tr><th>#</th><th>المصدر</th><th>النوع</th><th>التفاصيل</th><th>السعر</th><th>المنطقة</th><th>التاريخ</th><th>الإجراءات</th></tr></thead><tbody id="adsTableBody"></tbody></table></div></div>
       </div>
 
-      <!-- Pipeline -->
-      <div class="page" id="page-pipeline">
-        <h2 class="page-title">🔄 إدارة خطوط الصفقات (CRM Pipeline)</h2>
-        <p class="page-sub">تتبع كل صفقة من الاكتشاف حتى الإغلاق</p>
-        <div class="stats-grid" id="pipelineStats"></div>
-        <div class="pipeline-stages" id="pipelineStages"></div>
-        <div class="card" style="margin-top:15px"><div class="card-header"><h3>📋 جميع الصفقات النشطة</h3><button class="btn btn-primary btn-sm" onclick="showDealModal()">+ إضافة صفقة جديدة</button></div>
-        <div style="overflow-x:auto"><table id="dealsTable"><thead><tr><th>الصفقة</th><th>الإعلان</th><th>العميل</th><th>المرحلة</th><th>القيمة</th><th>آخر تفاعل</th><th>الإجراءات</th></tr></thead><tbody id="dealsTableBody"></tbody></table></div></div>
+      <div class="board-filter-actions">
+        <button id="boardRunSearchBtn" class="primary" type="button">بحث وتقييم حسب الاختيارات</button>
+        <button id="boardClearFiltersBtn" type="button">مسح اختيارات اللوحة</button>
       </div>
 
-      <!-- Market Analysis -->
-      <div class="page" id="page-market">
-        <h2 class="page-title">📈 تحليل السوق العقاري</h2>
-        <p class="page-sub">رؤى وتحليلات ذكية من ٣,٣٧٦ إعلان حقيقي</p>
-        <div class="stats-grid" id="marketStats"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px">
-          <div class="card"><div class="card-header"><h3>📊 الأسعار حسب المنطقة</h3></div><div style="overflow-x:auto"><table id="priceByArea"><thead><tr><th>المنطقة</th><th>#</th><th>متوسط السعر</th><th>أعلى سعر</th></tr></thead><tbody id="priceByAreaBody"></tbody></table></div></div>
-          <div class="card"><div class="card-header"><h3>📊 تحليل المصادر</h3></div><div style="overflow-x:auto"><table id="sourceAnalytics"><thead><tr><th>المصدر</th><th>#</th><th>النسبة</th><th>النوع</th></tr></thead><tbody id="sourceAnalyticsBody"></tbody></table></div></div>
+      <div id="boardMetricCards" class="board-metrics"></div>
+
+      <div class="board-layout">
+        <section class="board-overview">
+          <div class="section-title compact-title">
+            <h3>حركة الاختيارات</h3>
+            <span>اضغط أي كارت أو رقم لتشغيل نفس الفلاتر في التقييم.</span>
+          </div>
+          <div id="boardStats" class="board-stats"></div>
+          <div class="section-title compact-title companion-title">
+            <h3>إعلانات مرافقة</h3>
+            <span>حسب نفس الفلاتر والمنصات.</span>
+          </div>
+          <div id="boardCompanionAds" class="companion-ads"></div>
+          <div class="section-title compact-title companion-title">
+            <h3>فرص الربط والمكسب</h3>
+            <span>طلبات شراء/إيجار مقابل عروض مناسبة من نفس نطاق الفلاتر.</span>
+          </div>
+          <div id="boardMarketMatches" class="board-market-matches"></div>
+        </section>
+        <section class="governorate-board">
+          <div class="section-title compact-title">
+            <h3>الأرقام حسب المحافظات</h3>
+            <span>اضغط المحافظة لفتح مناطقها، أو اضغط الرقم لتصفية وتحليل نفس الاختيار.</span>
+          </div>
+          <div class="table-scroll">
+            <table class="governorate-table">
+              <thead>
+                <tr>
+                  <th>المحافظة / المنطقة</th>
+                  <th>الحركة</th>
+                  <th>الفرص</th>
+                  <th>للبيع</th>
+                  <th>شراء</th>
+                  <th>إيجار</th>
+                  <th>طلب إيجار</th>
+                </tr>
+              </thead>
+              <tbody id="governorateTableBody">
+                <tr><td colspan="7">جاري تحميل بيانات اللوحة...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section id="customSearchPanel" class="request-panel chat-panel custom-search-panel" hidden>
+      <div class="section-title">
+        <h2>بحث وتقييم الفرص</h2>
+        <span>اكتب وصف الطلب، اختر نطاق المصدر، ثم راجع النتائج والأدلة من نفس المكان</span>
+      </div>
+
+      <div id="chatWindow" class="chat-window" aria-live="polite"></div>
+
+      <div class="chat-controls">
+        <input id="chatInput" type="text" placeholder="اكتب سؤالك أو الوصف هنا... مثال: بيت 400م في ابو فطيرة، تشطيب سوبر ديلوكس" autocomplete="off">
+        <button id="sendChatBtn" class="primary" type="button" onclick="sendChat()">إرسال</button>
+      </div>
+
+      <div class="chat-options">
+        <label>نطاق المصدر
+          <select id="sourceModeField">
+            <option value="local">الفريج فقط</option>
+            <option value="all" selected>كل المصادر المتاحة</option>
+            <option value="source">منصة/مصدر محدد فقط</option>
+          </select>
+        </label>
+        <label>المنصة المحددة
+          <select id="selectedSourceField">
+            <option value="OpenSooq">OpenSooq</option>
+            <option value="Mourjan">Mourjan</option>
+            <option value="Q8Aqar">Q8Aqar</option>
+            <option value="الحسبة">الحسبة - صفقات عامة</option>
+            <option value="Sakan">Sakan</option>
+            <option value="Waseet">Waseet</option>
+            <option value="NabdAqar">NabdAqar</option>
+            <option value="Bu3qar">Bu3qar / بوشملان</option>
+            <option value="Aqarat">Aqarat</option>
+            <option value="4Sale">4Sale</option>
+            <option value="السوق المباشر">السوق المباشر</option>
+            <option value="مؤشرات رسمية">مؤشرات رسمية</option>
+            <option value="الصفقات الرسمية">الصفقات الرسمية</option>
+          </select>
+        </label>
+        <label class="compact"><input id="includeExternal" type="checkbox" checked> تفعيل مصادر خارجية</label>
+      </div>
+
+      <div class="actions compact-actions">
+        <button id="openEvidenceQuick" type="button">المصادر والأدلة</button>
+      </div>
+
+      <details class="advanced-fields">
+        <summary>خيارات متقدمة</summary>
+        <div class="fields">
+          <label>نوع العملية<input id="transactionField" type="text"></label>
+          <label>نوع العقار<input id="typeField" type="text"></label>
+          <label class="wide">المناطق<input id="areasField" type="text"></label>
+          <label>أقل مساحة<input id="minAreaField" type="number" min="0"></label>
+          <label>أعلى مساحة<input id="maxAreaField" type="number" min="0"></label>
+          <label>ميزانية البيع<input id="budgetField" type="number" min="0"></label>
+          <label>ميزانية الإيجار<input id="rentBudgetField" type="number" min="0"></label>
+          <label>عدد الغرف<input id="bedroomsField" type="number" min="0"></label>
         </div>
-        <div class="card"><div class="card-header"><h3>📈 رؤى السوق (Market Insights)</h3></div><div id="marketInsights" style="font-size:0.85rem;line-height:1.7"></div></div>
-      </div>
+      </details>
+    </section>
 
-      <!-- Alerts -->
-      <div class="page" id="page-alerts">
-        <h2 class="page-title">🔔 مركز التنبيهات</h2>
-        <p class="page-sub">رقم إنذار / تغيير سعر / صفقة جديدة / نظام</p>
-        <div class="stats-grid" id="alertStats"></div>
-        <div class="card"><div class="card-header"><h3>📬 جميع التنبيهات</h3>
-          <div style="display:flex;gap:6px"><select id="alertFilter" onchange="renderAlerts()" style="padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;font-size:0.8rem">
-            <option value="all">كل التنبيهات</option><option value="new-ad">إعلان جديد</option><option value="price-change">تغيير سعر</option><option value="new-deal">صفقة جديدة</option><option value="system">نظام/تقنية</option>
-          </select><button class="btn btn-secondary btn-sm" onclick="markAllAlertsRead()">✅ وضع الكل كمقروء</button></div></div>
-        <div id="alertsList"></div></div>
-      </div>
-
-      <!-- Reports -->
-      <div class="page" id="page-reports">
-        <h2 class="page-title">📋 إدارة التقارير</h2>
-        <p class="page-sub">تصدير تقارير شاملة — Excel · PDF · PowerPoint</p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px">
-          <div class="card text-center"><div style="font-size:2.5rem;color:var(--gold)">📊</div><h3 style="color:var(--text);margin:8px 0">تقرير Excel شامل</h3><p class="text-muted" style="font-size:0.7rem;margin-bottom:12px">كل الإعلانات + التحليلات + CRM</p><button class="btn btn-primary" style="width:100%" onclick="exportReport('excel')">تصدير Excel ←</button></div>
-          <div class="card text-center"><div style="font-size:2.5rem;color:var(--gold)">📄</div><h3 style="color:var(--text);margin:8px 0">تقرير PDF احترافي</h3><p class="text-muted" style="font-size:0.7rem;margin-bottom:12px">تصميم عصري جاهز للطباعة</p><button class="btn btn-primary" style="width:100%" onclick="exportReport('pdf')">تصدير PDF ←</button></div>
-          <div class="card text-center"><div style="font-size:2.5rem;color:var(--gold)">📑</div><h3 style="color:var(--text);margin:8px 0">عرض تقديمي PowerPoint</h3><p class="text-muted" style="font-size:0.7rem;margin-bottom:12px">عرض تقديمي جاهز</p><button class="btn btn-primary" style="width:100%" onclick="exportReport('ppt')">تصدير PowerPoint ←</button></div>
+    <section class="main-panel">
+      <section class="summary-strip">
+        <div>
+          <span class="metric-label">النتائج</span>
+          <strong id="resultCount">0</strong>
         </div>
-        <div class="card" style="margin-top:15px"><div class="card-header"><h3>📑 التقارير المحفوظة</h3></div><div id="savedReports" style="font-size:0.8rem"><p class="text-muted">لا توجد تقارير محفوظة حالياً</p></div></div>
+        <div>
+          <span class="metric-label">أفضل توصية</span>
+          <strong id="topScore">-</strong>
+        </div>
+        <div>
+          <span class="metric-label">مصدر متصل</span>
+          <strong id="connectedSources">-</strong>
+        </div>
+        <div>
+          <span class="metric-label">قاعدة البيانات</span>
+          <strong id="persistenceStatus">-</strong>
+        </div>
+      </section>
+
+      <section class="insight-panel">
+        <div>
+          <h2>الخلاصة <span id="analysisBadge" class="analysis-badge"></span></h2>
+          <div id="searchScopeNote" class="scope-note" hidden></div>
+          <p id="summaryText">لم يتم تشغيل تحليل بعد.</p>
+          <details id="fullSummaryBox" class="collapsible" hidden>
+            <summary>التقرير الكامل</summary>
+            <div id="fullSummaryText"></div>
+          </details>
+        </div>
+        <details class="collapsible">
+          <summary>طريقة الترتيب والحساب</summary>
+          <div class="method-box">
+            <h3>طريقة الترتيب</h3>
+            <p id="rankingMethod">بعد تشغيل البحث ستظهر طريقة حساب درجة التوصية.</p>
+          </div>
+        </details>
+        <details class="collapsible">
+          <summary>الفرق بين الإيجار والبيع والشراء (تأكيد الحسابات)</summary>
+          <div id="transactionSummary" class="method-box">
+            <p>بعد تشغيل البحث سيظهر تأكيد الفرق في حسابات كل نوع معاملة.</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="profit-panel">
+        <div class="section-title">
+          <h2>فرص المكسب</h2>
+          <span id="profitMeta">تظهر بعد البحث</span>
+        </div>
+        <p id="profitNote" class="scope-note"></p>
+        <div id="profitList" class="profit-list"></div>
+      </section>
+
+      <section class="similar-external-panel">
+        <div class="section-title">
+          <h2>إعلانات مشابهة من المواقع الأخرى</h2>
+          <span id="similarExternalMeta">تظهر بعد تشغيل البحث</span>
+        </div>
+        <p id="similarExternalNote" class="scope-note"></p>
+        <div id="similarExternalList" class="similar-external-list"></div>
+      </section>
+
+      <section class="opportunities-panel">
+        <div class="section-title opp-head">
+          <div>
+            <h2>أفضل الفرص والتوقعات</h2>
+            <span>يومية / أسبوعية / شهرية / سنوية + توقعات الأسعار، بربط مباشر بالعملاء المحتملين</span>
+          </div>
+          <div class="opp-head-actions">
+            <span class="opp-schedule-note">الصفحة الرئيسية = أفضل الفرص اليومية · تتحدث يوميًا في 6:00 صباحًا</span>
+            <span id="oppUpdated" class="opp-updated"></span>
+            <button id="oppRefreshBtn" class="primary">تحديث الفرص</button>
+          </div>
+        </div>
+
+        <div class="opp-tabs" id="oppTabs" role="tablist">
+          <button class="opp-tab active" data-tier="best" role="tab">الأفضل</button>
+          <button class="opp-tab" data-tier="daily" role="tab">يومية</button>
+          <button class="opp-tab" data-tier="weekly" role="tab">أسبوعية</button>
+          <button class="opp-tab" data-tier="monthly" role="tab">شهرية</button>
+          <button class="opp-tab" data-tier="yearly" role="tab">سنوية</button>
+          <button class="opp-tab" data-tier="forecast" role="tab">التوقعات</button>
+          <button class="opp-tab" data-tier="clients" role="tab">العملاء</button>
+          <button class="opp-tab" data-tier="alerts" role="tab">تنبيهات واتساب</button>
+          <button class="opp-tab" data-tier="digest" role="tab">الموجز الأسبوعي</button>
+          <button class="opp-tab" data-tier="history" role="tab">الأداء الزمني</button>
+          <button class="opp-tab" data-tier="matching" role="tab">العرض والطلب</button>
+          <button class="opp-tab" data-tier="delta" role="tab">الجديد والمحذوف</button>
+        </div>
+
+        <details class="collapsible opp-filters">
+          <summary>الفلاتر (المصدر / نوع الإعلان / المحافظة / المنطقة / نوع العقار / السعر)</summary>
+          <div id="oppSourceFilterRow" class="opp-source-filter" role="group" aria-label="فلتر مصدر الفرص">
+            <button class="opp-source-chip active" data-source="" type="button">الكل <b id="oppCountAll">0</b></button>
+            <button class="opp-source-chip" data-source="external" type="button">مواقع خارجية <b id="oppCountExternal">0</b></button>
+            <button class="opp-source-chip" data-source="local" type="button">الفريج فقط <b id="oppCountLocal">0</b></button>
+          </div>
+          <div id="oppKindFilterRow" class="opp-source-filter opp-kind-filter" role="group" aria-label="فلتر نوع الإعلان (مباشر/مكتب)">
+            <button class="opp-source-chip active" data-kind="" type="button">كل الأنواع</button>
+            <button class="opp-source-chip" data-kind="مباشر" type="button">مباشر <b id="oppCountDirect">0</b></button>
+            <button class="opp-source-chip" data-kind="مكتب" type="button">مكتب <b id="oppCountOffice">0</b></button>
+          </div>
+          <div class="fields opp-filter-fields">
+            <label>المحافظة
+              <select id="oppGovFilter"><option value="">الكل</option></select>
+            </label>
+            <label>المنطقة
+              <select id="oppAreaFilter"><option value="">الكل</option></select>
+            </label>
+            <label>نوع العقار
+              <select id="oppTypeFilter"><option value="">الكل</option></select>
+            </label>
+            <label>نوع العملية
+              <select id="oppTransactionFilter">
+                <option value="">الكل</option>
+                <option value="بيع">بيع / شراء</option>
+                <option value="إيجار">إيجار</option>
+              </select>
+            </label>
+            <label>أقل سعر (د.ك)
+              <input id="oppMinPrice" type="number" min="0" placeholder="0">
+            </label>
+            <label>أعلى سعر (د.ك)
+              <input id="oppMaxPrice" type="number" min="0" placeholder="—">
+            </label>
+            <label>الحد الأدنى لدرجة الفرصة
+              <input id="oppMinScore" type="number" min="0" max="100" placeholder="0">
+            </label>
+          </div>
+        </details>
+
+        <p id="oppOfficialNote" class="official-note" hidden></p>
+        <p id="oppConfidenceMethod" class="scope-note" hidden></p>
+        <div id="oppList" class="results"></div>
+      </section>
+
+      <section class="sources-panel">
+        <div class="section-title">
+          <h2>تشغيل المنصة والبيانات</h2>
+          <span>تحديث آلي يومي للمصادر والفرص مع إشعارات تشغيل واضحة</span>
+        </div>
+        <div class="ops-panel">
+          <div class="ops-card ops-card-primary">
+            <h3>وكيل التحديث اليومي</h3>
+            <p>يجلب أحدث المصادر، يحدّث فرص المكسب، يحفظ اللقطات، ويعرض إشعارات التغيير. التشغيل المجدول المقترح: يوميًا 6:00 صباحًا مع كاش يومي للفرص وكاش أسبوعي للموجز.</p>
+            <div class="ops-actions">
+              <button id="runDailyAgentBtnInline" class="primary" type="button">تشغيل التحديث الآن</button>
+            </div>
+            <p id="dailyAgentStateInline" class="ops-status">سيظهر هنا وقت آخر تشغيل وحالته.</p>
+          </div>
+        </div>
+        <div id="dailyUpdateNotice" class="daily-update-notice" hidden></div>
+        <details class="collapsible ops-advanced">
+          <summary>استيراد يدوي احتياطي لصفقات وزارة العدل</summary>
+          <p class="scope-note">المسار الأساسي أوتوماتيكي عبر الوكيل اليومي و <code>OFFICIAL_TRANSACTIONS_SOURCE</code>. استخدم هذا فقط عند توفر CSV/JSON موثق وتريد إدخاله فورًا.</p>
+          <input id="officialImportFile" type="file" accept=".csv,.json,text/csv,application/json">
+          <div class="ops-actions">
+            <button id="officialImportBtn" class="primary" type="button">استيراد الصفقات</button>
+          </div>
+          <p id="officialImportStatus" class="ops-status"></p>
+        </details>
+
+        <div class="section-title">
+          <h2>حالة المصادر</h2>
+          <span>مختصر ما دخل التقييم وما لم يدخل</span>
+        </div>
+        <div id="sourceSummaryBar" class="source-summary-bar"></div>
+        <details class="collapsible">
+          <summary>تفاصيل المصادر</summary>
+          <div id="sourceStatus" class="source-grid"></div>
+        </details>
+        <details class="collapsible">
+          <summary>الخطة المستقبلية للمصادر</summary>
+          <div id="externalSourcePlan" class="source-grid muted-grid"></div>
+        </details>
+        <details class="collapsible">
+          <summary>منصات الاعتماد (تفاصيل)</summary>
+          <div class="registry-wrap">
+            <h3>منصات الاعتماد</h3>
+            <div id="sourceRegistry" class="registry-table"></div>
+          </div>
+        </details>
+        <div id="externalLinks" class="external-links"></div>
+      </section>
+
+      <section class="results-panel">
+        <div class="section-title">
+          <h2>النتائج المرتبة</h2>
+          <span>حسب درجة التوصية</span>
+        </div>
+        <div id="results" class="results"></div>
+      </section>
+    </section>
+  </main>
+
+  <template id="resultTemplate">
+    <article class="result-card">
+      <div class="rank-cell"></div>
+      <div class="result-body">
+        <div class="result-head">
+          <div>
+            <h3></h3>
+            <p class="meta"></p>
+            <span class="outside-area pill warn" hidden></span>
+          </div>
+          <div class="verdict">
+            <span class="verdict-label"></span>
+            <strong class="recommendation"></strong>
+          </div>
+        </div>
+
+        <div class="score-grid"></div>
+        <div class="result-insights">
+          <span class="data-quality"></span>
+          <span class="source-trust"></span>
+        </div>
+        <p class="decision-line"></p>
+        <a class="open-link" target="_blank" rel="noreferrer">فتح الإعلان الأصلي</a>
+
+        <details class="result-details">
+          <summary>التفاصيل والأدلة</summary>
+          <p class="valuation-reason"></p>
+          <p class="description"></p>
+          <div class="result-clients"></div>
+          <div class="financing-info"></div>
+
+          <div class="reason-block">
+            <h4>لماذا ظهرت بهذا الترتيب؟</h4>
+            <div class="reasons"></div>
+            <div class="warnings"></div>
+          </div>
+
+          <details class="evidence">
+            <summary>الأدلة والمقارنات</summary>
+            <div class="comparables"></div>
+          </details>
+
+          <details class="calc-details">
+            <summary>مصدر كل رقم وطريقة الحساب</summary>
+            <div class="number-sources"></div>
+            <h4>تفصيل مطابقة الطلب</h4>
+            <div class="match-breakdown"></div>
+            <h4>تفصيل درجة التوصية</h4>
+            <div class="recommendation-breakdown"></div>
+          </details>
+        </details>
       </div>
+    </article>
+  </template>
 
-      <!-- Chat Bot -->
-      <div class="page" id="page-chat">
-        <h2 class="page-title">💬 المساعد الذكي</h2>
-        <p class="page-sub">اسأل أي سؤال — المو sebastian يقدم لك المعلومات حسب صلاحياتك</p>
-        <div class="chat-box"><div class="chat-messages" id="chatMessages"></div>
-        <div class="chat-input-area"><input type="text" id="chatInput" placeholder="اكتب سؤالك هنا..." onkeypress="if(event.key==='Enter')sendChat()" style="flex:1;padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;font-size:0.85rem;outline:none"><button onclick="sendChat()" class="btn btn-primary">إرسال</button></div></div>
-      </div>
-
-      <!-- Recommendations -->
-      <div class="page" id="page-recommendations">
-        <h2 class="page-title">⭐ التوصيات الذكية</h2>
-        <p class="page-sub">توصيات مخصصة بناءً على بيانات السوق والتفاعلات</p>
-        <div class="stats-grid" id="recStats"></div>
-        <div class="card"><div class="card-header"><h3>⭐ أفضل الإعلانات الموصى بها</h3><span class="text-muted" style="font-size:0.7rem">ترتيب حسب درجة التوصية</span></div><div id="recommendationsList"></div></div>
-      </div>
-    </main>
-  </div>
-</div>
-
-<!-- ===== EXPORT MODAL ===== -->
-<div class="modal-overlay" id="exportModal"><div class="modal"><h2>📤 تصدير التقرير</h2><p style="color:var(--muted);font-size:0.8rem;margin-bottom:15px">اختر forma التصدير المفضل</p>
-  <div class="export-option" onclick="exportReport('excel')"><div class="ex-icon">📊</div><div class="ex-info"><div class="ex-title">Excel Spreadsheet</div><div class="ex-desc">ملف Excel شامل يحتوي على كل البيانات</div></div><div class="badge badge-info">للبوس فقط</div></div>
-  <div class="export-option" onclick="exportReport('pdf')"><div class="ex-icon">📄</div><div class="ex-info"><div class="ex-title">PDF Report</div><div class="ex-desc">تقرير PDF احترافي بتصميم عصري</div></div><div class="badge badge-info">للبوس فقط</div></div>
-  <div class="export-option" onclick="exportReport('ppt')"><div class="ex-icon">📑</div><div class="ex-info"><div class="ex-title">PowerPoint Presentation</div><div class="ex-desc">عرض تقديمي جاهز للتقديم</div></div><div class="badge badge-info">للبوس فقط</div></div>
-  <button class="close-btn" onclick="closeExportModal()">إلغاء</button></div></div>
-
-<!-- ===== WHATSAPP MODAL ===== -->
-<div class="modal-overlay" id="waModal"><div class="modal"><h2>💬 إرسال عبر واتساب</h2><p style="color:var(--muted);font-size:0.8rem;margin-bottom:15px">سيتم فتح واتساب ويب تلقائياً وإرسال الرسالة</p>
-  <div class="card" style="margin-bottom:15px">
-    <div class="form-group"><label>رقم الهاتف (بدون رمز الدولة)</label><input type="text" id="waNumber" value="01064955051" style="padding:10px 12px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit"></div>
-    <div class="form-group"><label>رسالة مرسلة</label><textarea id="waMessage" rows="4" style="width:100%;padding:10px 12px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;resize:vertical">السلام عليكم ورحمة الله،
-
-📊 تقرير من نظام الفريج العقاري:
-
-🟢 الإعلانات: 3,376 إعلان (من 10 مصادر)
-🟡 للبيع: 1,846 | للإيجار: 1,259
-🔴 أعلى منطقة: السالمية (285 إعلان)
-
-للتفاصيل الكاملة، زور لوحة التحكم.
-
-فريق الفريج العقاري</textarea></div>
-  </div>
-  <button class="btn btn-primary" style="width:100%" onclick="sendWhatsApp()">🚀 إرسال عبر واتساب ←</button>
-  <button class="close-btn" style="margin-top:8px" onclick="closeWhatsAppModal()">إلغاء</button></div></div>
-
-<!-- ===== DEAL MODAL ===== -->
-<div class="modal-overlay" id="dealModal"><div class="modal"><h2>➕ إضافة صفقة جديدة</h2><p style="color:var(--muted);font-size:0.8rem;margin-bottom:15px">أضف صفقة جديدة إلى خط الأنابيب</p>
-  <div class="card" style="margin-bottom:15px">
-    <div class="form-group"><label>اسم العميل / الوكيل</label><input type="text" id="dealClient" placeholder="اسم العميل" style="padding:10px 12px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit"></div>
-    <div class="form-group"><label>الإعلان المرتبط (رقم الإعلان)</label><input type="text" id="dealAd" placeholder="مثلاً: 8318" style="padding:10px 12px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit"></div>
-    <div class="form-group"><label>القيمة المحتملة ( KD )</label><input type="number" id="dealValue" placeholder="مثلاً: 560000" style="padding:10px 12px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit"></div>
-    <div class="form-group"><label>مرحلة الصفقة</label><select id="dealStage" style="padding:10px 12px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit">
-      <option value="new">جديد / اكتشاف</option><option value="lead">قائد محتمل</option><option value="negotiating">مفاوضات</option><option value="closed">مغلق / ناجح</option><option value="lost">خسارة</option>
-    </select></div>
-    <div class="form-group"><label>ملاحظات</label><input type="text" id="dealNotes" placeholder="ملاحظات إضافية" style="padding:10px 12px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit"></div>
-  </div>
-  <button class="btn btn-primary" style="width:100%" onclick="addDeal()">➕ إضافة الصفقة ←</button>
-  <button class="close-btn" style="margin-top:8px" onclick="closeDealModal()">إلغاء</button></div></div>
-
-<!-- ===== TOAST ===== -->
-<div class="toast" id="toast"></div>
-
+  <script src="app.js?v=20260809-final-platform"></script>
 <script>
-// =============================================
-// === REAL DATA FROM SUPABASE (3,376 listings) ===
-// =============================================
-const REAL_DATA = {
-  totalListings: 3376,
-  totalDevelopments: 50,
-  sources: [
-    {id:1,name:"OpenSooq",type:"منصة إلكترونية",transactions:["للبيع","للإيجار"],reliability:3,access:"public",phone:"+965 2220 0000",country:"KW",note:"أعلى منصة عقارية",count:1598,pct:47.3},
-    {id:2,name:"4Sale",type:"منصة إلكترونية",transactions:["للبيع","للإيجار"],reliability:3,access:"public",phone:"+965 2225 0000",country:"KW",note:"منصة تنافسية",count:729,pct:21.6},
-    {id:3,name:"Q8Aqar",type:"منصة إلكترونية",transactions:["للبيع","للإيجار"],reliability:3,access:"public",phone:"+965 2200 0000",country:"KW",note:"مئات العروض يومياً",count:341,pct:10.1},
-    {id:4,name:"Mourjan",type:"منصة إلكترونية",transactions:["للبيع","للإيجار"],reliability:2,access:"public",phone:"+965 2200 5555",country:"KW",note:"منصة كويتية",count:331,pct:9.8},
-    {id:5,name:"Bu3qar / Boshamlan",type:"دليل عقاري",transactions:["للبيع","للإيجار","للتبادل"],reliability:3,access:"public",phone:"+965 6000 0000",country:"KW",note:"دليل الكويت العقاري",count:219,pct:6.5},
-    {id:6,name:"Yebtah",type:"منصة إلكترونية",transactions:["للبيع","للإيجار"],reliability:2,access:"public",phone:"+965 2222 0000",country:"KW",note:"منصة ناشئة",count:90,pct:2.7},
-    {id:7,name:"AlHisba",type:"تقيم عقاري",transactions:["للبيع","تقيم"],reliability:3,access:"admin",phone:"+965 2200 1111",country:"KW",note:"تقيم موثوق + صفقات مسجلة",count:30,pct:0.9},
-    {id:8,name:"Boshamlan (مكتب)",type:"مكتب عقاري",transactions:["للبيع","للإيجار","للتبادل"],reliability:2,access:"admin",phone:"+965 6000 9999",country:"KW",note:"مكتب متخصص",count:10,pct:0.3},
-    {id:9,name:"FindQ8",type:"منصة إلكترونية",transactions:["للبيع","للإيجار"],reliability:2,access:"public",phone:"+965 2200 8888",country:"KW",note:"بحث متقدم",count:20,pct:0.6},
-    {id:10,name:"Alforaij (المشروع)",type:"مشروع داخلي",transactions:["للبيع","للإيجار","للتبادل"],reliability:3,access:"boss",phone:"+20 106 495 5051",country:"EG",note:"مشروع الفريج — المصدر الأساسي",count:8,pct:0.2}
-  ],
-  transactions: {للبيع:1846, للإيجار:1259, مطلوب_للشراء:218, مطلوب_للإيجار:53},
-  topAreas: [["السالمية",285],["حوالي",250],["الفروانية",174],["المطلاع",139],["الأحمدي",109],["خيطان",95],["صباح السالم",86],["صباح الأحمد",83],["المهبولة",82],["جابر الأحمد",78],["الجهزة",68],["الجابرية",56],["الزهراء",39],["الفحيحيل",37],["الرميثية",37]],
-  avgPrice: 78254379,
-  maxPrice: 165175200230,
-  minPrice: 1,
-  priceDisclosed: 2271,
-  undisclosedPrice: 1105,
-  avgViews: 0
-};
-
-// Mock ads from real data
-const ADS = [
-  {id:8318,sourceId:3,type:"للبيع",details:"شقة 3 غرف في جنوب عبدالله المبارك",price:560000,area:"جنوب عبدالله المبارك",city:"السالمية",posted:"2026-09-01",views:47,contacts:3},
-  {id:8779,sourceId:2,type:"للبيع",details:"شقة 2 غرف في الرابية",price:295000,area:"الرابية",city:"السالمية",posted:"2026-09-01",views:23,contacts:0},
-  {id:1955,sourceId:1,type:"للإيجار",details:"شقة 2 غرف في الشرق",price:400,area:"الشرق",city:"حوالي",posted:"2026-08-31",views:31,contacts:1},
-  {id:8772,sourceId:2,type:"للبيع",details:"شقة 1 غرفة في السفرة",price:350000,area:"السفرة",city:"السالمية",posted:"2026-09-02",views:12,contacts:2},
-  {id:5421,sourceId:4,type:"للإيجار",details:"فيلا 4 غرف في السالمية",price:1200,area:"السالمية",city:"السالمية",posted:"2026-08-30",views:67,contacts:5},
-  {id:2341,sourceId:6,type:"للبيع",details:"شقة 2 غرف في المنبع",price:420000,area:"حوالي المنبع",city:"حوالي",posted:"2026-09-02",views:19,contacts:1},
-  {id:6733,sourceId:1,type:"للإيجار",details:"غرفة في شقة مشتركة",price:20,area:"المهبولة",city:"المهبولة",posted:"2026-09-01",views:88,contacts:12},
-  {id:9012,sourceId:3,type:"مطلوب للشراء",details:"شقة 3 غرف في العلمية",price:0,area:"العلمية",city:"الرابط",posted:"2026-09-01",views:9,contacts:0},
-  {id:7890,sourceId:2,type:"للبيع",details:"شقة 1 غرفة في الفنطاس",price:180000,area:"الفنطاس",city:"حوالي",posted:"2026-09-02",views:5,contacts:0},
-  {id:3456,sourceId:4,type:"للبيع",details:"شقة 4 غرف في قرية المحمية",price:1200000,area:"قرية المحمية",city:"السالمية",posted:"2026-08-29",views:34,contacts:4},
-  {id:1122,sourceId:7,type:"للبيع",details:"تقيم عقار في الصليبية",price:0,area:"الصليبية",city:"العاصمة",posted:"2026-09-01",views:22,contacts:2},
-  {id:4567,sourceId:10,type:"للبيع",details:"شقة إدارية في الشولية — عرض حصري",price:1500000,area:"الشولية",city:"حوالي",posted:"2026-09-02",views:15,contacts:1},
-  {id:8901,sourceId:8,type:"للإيجار",details:"شقة 3 غرف في السيماء",price:850,area:"السيماء",city:"حوالي",posted:"2026-08-30",views:28,contacts:2},
-  {id:3344,sourceId:9,type:"للبيع",details:"شقة 2 غرف في حوالي المنبع",price:310000,area:"حوالي المنبع",city:"حوالي",posted:"2026-09-01",views:8,contacts:1},
-  {id:5678,sourceId:5,type:"للإيجار",details:"شقة استراحة 1 غرفة في الدانة",price:90,area:"الدانة",city:"السالمية",posted:"2026-09-02",views:14,contacts:0}
-];
-
-// =============================================
-// === USERS ===
-// =============================================
-const USERS_DB = {
-  'boss@alforaijboard.com': {id:'u1',name:'أحمد كمالسة',email:'boss@alforaijboard.com',role:'boss',pass:'alforaij2026'},
-  'admin@alforaijboard.com': {id:'u2',name:'مدير السوق',email:'admin@alforaijboard.com',role:'admin',pass:'alforaij2026'},
-  'employee@alforaijboard.com': {id:'u3',name:'مساعد عقاري',email:'employee@alforaijboard.com',role:'employee',pass:'alforaij2026'}
-};
-
-// =============================================
-// === DEALS, ALERTS, TRACKING ===
-// =============================================
-let dealsDB = [
-  {id:'d1',client:'عبدالله الحربي',adId:8318,value:540000,stage:'negotiating',lastInteraction:'2026-09-02',notes:'يعرض أقل بس مسار مقبول'},
-  {id:'d2',client:'فهد العنزي',adId:5421,value:1100,stage:'lead',lastInteraction:'2026-09-01',notes:'يريد زيارة العقار'},
-  {id:'d3',client:'سالم الباز',adId:2341,value:400000,stage:'new',lastInteraction:'2026-09-02',notes:'طلب تفاصيل أكثر'},
-  {id:'d4',client:'نوره السالم',adId:6733,value:0,stage:'closed',lastInteraction:'2026-08-28',notes:'تم الإيجار بنجاح'},
-  {id:'d5',client:'خالد الشيحة',adId:3456,value:1150000,stage:'negotiating',lastInteraction:'2026-09-01',notes:'تفاوض على السعر'}
-];
-
-let alertsDB = [
-  {id:'a1',type:'new-ad',title:'إعلان جديد جذاب',message:'شقة 4 غرف في قرية المحمية بسعر 1,200,000 KD — رقم 3456',time:'2026-09-02 14:30',read:false},
-  {id:'a2',type:'price-change',title:' انخفاض سعر إعلان',message:'شقة 2 غرف في الرابية انخفض السعر من 320,000 إلى 295,000 KD — رقم 8779',time:'2026-09-02 12:15',read:false},
-  {id:'a3',type:'new-deal',title:'صفقة جديدة',message:'عميل جديد: نوره السالم — صفقة مغلقة بنجاح — إيجار شقة',time:'2026-09-01 16:45',read:true},
-  {id:'a4',type:'system',title:'تنبيه نظامي',message:'تم تحديث البيانات بنجاح من Supabase — آخر تحديث: 2026-09-02 10:00',time:'2026-09-02 10:00',read:true}
-];
-
-let clickTrackingDB = [
-  {time:'2026-09-02 14:35',user:'boss@alforaijboard.com',event:'view-ad',adId:8318,detail:'عرض إعلان 8318 — Bu3qar'},
-  {time:'2026-09-02 14:36',user:'boss@alforaijboard.com',event:'contact-click',adId:8318,detail:'نقر على زر التواصل'},
-  {time:'2026-09-02 14:40',user:'boss@alforaijboard.com',event:'export',type:'excel',detail:'تصدير Excel شامل'},
-  {time:'2026-09-02 14:42',user:'boss@alforaijboard.com',event:'deal-stage',dealId:'d1',detail:'تحديث مرحلة الصفقة d1'}
-];
-
-// =============================================
-// === STATE ===
-// =============================================
-let currentUser = null;
-
-// =============================================
-// === LOGIN ===
-// =============================================
-function handleLogin(e){
-  e.preventDefault();
-  const email = document.getElementById('loginEmail').value.trim();
-  const pass = document.getElementById('loginPassword').value;
-  const user = USERS_DB[email];
-  const errEl = document.getElementById('loginError');
-  if(!user || user.pass !== pass){
-    errEl.textContent = '❌ البريد الإلكتروني أو كلمة المرور غير صحيحة';
-    errEl.style.display = 'block';
-    return false;
-  }
-  errEl.style.display = 'none';
-  currentUser = user;
-  sessionStorage.setItem('currentUser', JSON.stringify(user));
-  document.getElementById('loginPage').style.display = 'none';
-  document.getElementById('dashboard').style.display = 'flex';
-  initDashboard();
-  return false;
-}
-
-function logout(){
-  currentUser = null;
-  sessionStorage.removeItem('currentUser');
-  document.getElementById('dashboard').style.display = 'none';
-  document.getElementById('loginPage').style.display = 'flex';
-  document.getElementById('loginEmail').value = '';
-  document.getElementById('loginPassword').value = '';
-}
-
-(function checkSession(){
-  const saved = sessionStorage.getItem('currentUser');
-  if(saved){
-    try{ currentUser = JSON.parse(saved); document.getElementById('loginPage').style.display='none'; document.getElementById('dashboard').style.display='flex'; initDashboard(); }catch(e){ sessionStorage.removeItem('currentUser'); }
-  }
-})();
-
-// =============================================
-// === PERMISSIONS ===
-// =============================================
-function isBoss(){ return currentUser && currentUser.role === 'boss'; }
-function isAdmin(){ return currentUser && currentUser.role === 'admin'; }
-function canViewContact(ad){ return isBoss(); }
-
-// =============================================
-// === DASHBOARD INIT ===
-// =============================================
-function initDashboard(){
-  const badge = document.getElementById('roleBadge');
-  badge.className = 'role-badge ' + currentUser.role;
-  const names = {boss:'👑 البوس',admin:'🛡️ admin',employee:'👤 موظف'};
-  badge.textContent = names[currentUser.role] || currentUser.name;
-  document.getElementById('userNameDisplay').textContent = currentUser.name;
-
-  const perms = [];
-  if(isBoss()){
-    perms.push('👑 رؤية كل المصادر والأرقام');
-    perms.push('👑 رؤية كل التفاصيل');
-    perms.push('👑 تصدير PDF/Excel/PPT');
-    perms.push('👑 صفحة تتبع النقرات');
-    perms.push('👑 CRM كامل');
-    perms.push('👑 تحليل السوق');
-    perms.push('👑 التوصيات الذكية');
-  } else if(isAdmin()){
-    perms.push('🛡️ عرض الإعلانات (بدون تواصل)');
-    perms.push('🛡️ إرسال تفاصيل عبر الواتساب');
-    perms.push('🛡️ CRM محدود');
-    perms.push('🛡️ تحليل السوق');
-    perms.push('🛡️ تصدير Excel فقط');
-  } else {
-    perms.push('👤 عرض الإعلانات فقط (بدون تواصل)');
-    perms.push('👤 الطلب عند التواصل — النظام يرسل التفاصيل');
-  }
-  document.getElementById('permissionsList').innerHTML = perms.join('<br>');
-
-  renderMainStats();
-  populateSourceFilters();
-  renderAds();
-  renderPipeline();
-  renderMarket();
-  renderAlerts();
-  renderRecommendations();
-  renderChat();
-  const now = new Date();
-  document.getElementById('lastUpdate').textContent = now.toLocaleString('ar-EG');
-}
-
-// =============================================
-// === PAGE SWITCHING ===
-// =============================================
-function switchPage(pageId){
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + pageId).classList.add('active');
-  document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-  document.querySelector('.menu-item[data-page="'+pageId+'"]').classList.add('active');
-  if(pageId==='dashboard'){ renderMainStats(); renderAlerts(); renderRecommendations(); }
-  if(pageId==='ads') renderAds();
-  if(pageId==='pipeline') renderPipeline();
-  if(pageId==='market') renderMarket();
-  if(pageId==='alerts') renderAlerts();
-  if(pageId==='recommendations') renderRecommendations();
-}
-
-// =============================================
-// === FILTERS ===
-// =============================================
-function populateSourceFilters(){
-  const sel = document.getElementById('adFilterSrc');
-  sel.innerHTML = '<option value="all">كل المصادر</option>';
-  REAL_DATA.sources.forEach(s => sel.innerHTML += '<option value="'+s.id+'">'+s.name+' ('+s.count+' إعلان)</option>');
-}
-
-function getSource(id){ const s = REAL_DATA.sources.find(x=>x.id===id); return s || null; }
-
-function renderAds(){
-  const search = document.getElementById('adSearch').value.toLowerCase();
-  const typeFilter = document.getElementById('adFilterType').value;
-  const srcFilter = document.getElementById('adFilterSrc').value;
-  const sortBy = document.getElementById('adFilterSort').value;
-
-  let filtered = ADS.filter(ad => {
-    const src = getSource(ad.sourceId);
-    if(!src) return false;
-    if(search){
-      const hay = (ad.details+' '+ad.area+' '+ad.city+' '+src.name).toLowerCase();
-      if(!hay.includes(search)) return false;
-    }
-    if(typeFilter !== 'all' && ad.type !== typeFilter) return false;
-    if(srcFilter !== 'all' && ad.sourceId != srcFilter) return false;
-    return true;
-  });
-
-  if(sortBy==='newest') filtered.sort((a,b)=>b.posted.localeCompare(a.posted));
-  else if(sortBy==='oldest') filtered.sort((a,b)=>a.posted.localeCompare(b.posted));
-  else if(sortBy==='price-desc') filtered.sort((a,b)=>(b.price||0)-(a.price||0));
-  else if(sortBy==='price-asc') filtered.sort((a,b)=>(a.price||0)-(b.price||0));
-  else if(sortBy==='views') filtered.sort((a,b)=>(b.views||0)-(a.views||0));
-
-  document.getElementById('adsCount').textContent = filtered.length;
-
-  const tbody = document.getElementById('adsTableBody');
-  tbody.innerHTML = '';
-  if(filtered.length===0){ tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted)">لا توجد إعلانات مطابقة</td></tr>'; return; }
-
-  filtered.forEach(ad => {
-    const src = getSource(ad.sourceId);
-    if(!src) return;
-    const isBossUser = isBoss();
-    const isInternal = src.access === 'boss';
-
-    if(isInternal && !isBossUser) return;
-
-    const tr = document.createElement('tr');
-    const canSee = canViewContact(ad);
-    const priceStr = ad.price > 0 ? (ad.type==='للإيجار' ? ad.price+' KD/شهر' : ad.price.toLocaleString('ar-EG')+' KD') : '<span class="text-muted">—</span>';
-    const bossExtra = isBossUser ? '<br><span class="tag">👁️'+ad.views+'</span><span class="tag">📞'+ad.contacts+'</span>' : '';
-
-    tr.innerHTML = '<td><strong>#'+ad.id+'</strong></td>'+
-      '<td><div class="text-gold">'+src.name+'</div><div class="text-muted" style="font-size:0.65rem">'+src.type+'</div></td>'+
-      '<td><span class="badge '+(ad.type==='للبيع'?'badge-info':ad.type==='للإيجار'?'badge-success':'badge-warn')+'">'+ad.type+'</span></td>'+
-      '<td>'+ad.details+'<br><span class="text-muted">📍 '+ad.area+(ad.city?' · '+ad.city:'')+'</span>'+bossExtra+'</td>'+
-      '<td>'+priceStr+'</td>'+
-      '<td>'+ad.area+'</td>'+
-      '<td class="text-muted">'+ad.posted+'</td>'+
-      '<td>'+(canSee?'<button class="btn btn-success btn-sm" onclick="contactAd('+ad.id+')">📞 تواصل</button><button class="btn btn-secondary btn-sm" onclick="showAdDetails('+ad.id+')">📋 تفاصيل</button>':'<button class="btn btn-primary btn-sm" onclick="requestContact('+ad.id+')">📬 طلب تواصل</button>')+'</td>';
-    tbody.appendChild(tr);
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js').catch(function(e){ console.warn('SW failed', e); });
   });
 }
-
-function contactAd(adId){
-  const ad = ADS.find(a=>a.id===adId);
-  const src = getSource(ad.sourceId);
-  const msg = '📋 تفاصيل الإعلان الكاملة:\n\nرقم: #'+ad.id+'\nالمصدر: '+src.name+' ('+src.country+')\nالنوع: '+ad.type+'\nالتفاصيل: '+ad.details+'\nالسعر: '+(ad.price>0?(ad.type==='للإيجار'?ad.price+' KD/شهر':ad.price.toLocaleString('ar-EG')+' KD'):'—')+'\nالمنطقة: '+ad.area+(ad.city?' · '+ad.city:'')+', مُنشور: '+ad.posted+', مشاهدات: '+ad.views+', تواصل: '+ad.contacts+'\n📞 '+src.phone+'\n📝 '+src.note+'\n\nتم إنشاؤه بواسطة نظام الفريج العقاري';
-  showToast('تم نسخ التفاصيل إلى الحافظة', 'success');
-  try{ navigator.clipboard.writeText(msg); showToast('تم نسخ الرسالة', 'success'); }catch(e){}
-  trackEvent('contact-click', adId);
-}
-
-function requestContact(adId){
-  const ad = ADS.find(a=>a.id===adId);
-  const newDeal = {id:'d'+Date.now(),client:'عميل غير معروف',adId:ad.id,value:ad.price||0,stage:'new',lastInteraction:new Date().toISOString().split('T')[0],notes:'طلب تواصل من المستخدم'};
-  dealsDB.unshift(newDeal);
-  const alert = {id:'a'+Date.now(),type:'new-deal',title:'طلب تواصل جديد',message:'تم طلب التواصل مع إعلان #'+ad.id+' — '+ad.details+' — سيتم إرسال التفاصيل عبر واتساب',time:new Date().toISOString().split('T')[1].substring(0,5),read:false};
-  alertsDB.unshift(alert);
-  showToast('✅ تم إنشاء صفقة جديدة — سيتم إرسال التفاصيل قريباً', 'success');
-  trackEvent('contact-request', adId);
-  setTimeout(()=>openWhatsAppModal(adId), 500);
-}
-
-function showAdDetails(adId){
-  const ad = ADS.find(a=>a.id===adId);
-  const src = getSource(ad.sourceId);
-  if(!ad || !src) return;
-  const msg = '📋 تفاصيل الإعلان #'+ad.id+'\n\nالمصدر: '+src.name+'\nالنوع: '+src.type+'\nالمعاملات: '+src.transactions.join(', ')+'\nالموثوقية: '+(src.reliability===3?'عالية':src.reliability===2?'متوسطة':'منخفضة')+'\nالتواصل: '+src.phone+' ('+src.country+')\nالملاحظات: '+src.note+'\n\nالإعلان:\nالنوع: '+ad.type+'\nالتفاصيل: '+ad.details+'\nالسعر: '+(ad.price>0?(ad.type==='للإيجار'?ad.price+' KD/شهر':ad.price.toLocaleString('ar-EG')+' KD'):'غير معلن')+'\nالمنطقة: '+ad.area+(ad.city?' · '+ad.city:'')+'\nالتاريخ: '+ad.posted+'\nالمشاهدات: '+ad.views+'\nالتواصلات: '+ad.contacts;
-  showToast('تم نسخ التفاصيل', 'success');
-  try{ navigator.clipboard.writeText(msg); showToast('تم نسخ الرسالة', 'success'); }catch(e){}
-  trackEvent('view-details', adId);
-}
-
-// =============================================
-// === PIPELINE ===
-// =============================================
-function renderPipeline(){
-  const stages = {new:0,lead:0,negotiating:0,closed:0,lost:0};
-  dealsDB.forEach(d => { if(stages[d.stage]!==undefined) stages[d.stage]++; });
-  const total = dealsDB.length;
-  const active = dealsDB.filter(d=>d.stage!=='closed' && d.stage!=='lost').length;
-  const closed = dealsDB.filter(d=>d.stage==='closed').length;
-  const totalValue = dealsDB.filter(d=>d.stage!=='lost').reduce((s,d)=>s+d.value,0);
-
-  document.getElementById('pipelineStats').innerHTML = 
-    statCard('📋','إجمالي الصفقات',total)+
-    statCard('🔄','الصفقات النشطة',active)+
-    statCard('✅','الصفقات المغلقة',closed)+
-    statCard('💰','إجمالي القيمة (KD)',totalValue.toLocaleString('ar-EG'));
-
-  document.getElementById('pipelineStages').innerHTML = 
-    pipelineStage('new','جديد / اكتشاف',stages.new)+
-    pipelineStage('lead','قائد محتمل',stages.lead)+
-    pipelineStage('negotiating','مفاوضات',stages.negotiating)+
-    pipelineStage('closed','مغلق / ناجح',stages.closed)+
-    pipelineStage('lost','خسارة',stages.lost);
-
-  const tbody = document.getElementById('dealsTableBody');
-  tbody.innerHTML = '';
-  dealsDB.forEach(d => {
-    const ad = ADS.find(a=>a.id==d.adId);
-    const src = ad ? getSource(ad.sourceId) : null;
-    const tr = document.createElement('tr');
-    tr.innerHTML = '<td><strong>'+d.id+'</strong></td>'+
-      '<td>'+(ad?'#'+ad.id+' — '+(src?src.name:''):'—')+'</td>'+
-      '<td>'+d.client+'</td>'+
-      '<td><span class="badge '+('badge-success':'badge-info':'badge-warn':'badge-danger':'badge-muted')+'">'+(d.stage==='new'?'جديد':d.stage==='lead'?'قائد':d.stage==='negotiating'?'مفاوضات':d.stage==='closed'?'مغلق':'خسارة')+'</span></td>'+
-      '<td>'+(d.value>0?d.value.toLocaleString('ar-EG')+' KD':'—')+'</td>'+
-      '<td class="text-muted">'+d.lastInteraction+'</td>'+
-      '<td><button class="btn btn-secondary btn-sm" onclick="updateDealStage(\''+d.id+'\',\'new\')">🔄 جديد</button><button class="btn btn-secondary btn-sm" onclick="updateDealStage(\''+d.id+'\',\'negotiating\')">🤝 مفاوضات</button>'+(d.stage==='closed'?'<span class="text-success">✅ مغلق</span>':'<button class="btn btn-secondary btn-sm" onclick="updateDealStage(\''+d.id+'\',\'closed\')">✅ إغلاق</button>')+'</td>';
-    tbody.appendChild(tr);
-  });
-}
-
-function pipelineStage(stageName,displayName,count){
-  const colors = {new:'var(--success)',lead:'var(--info)',negotiating:'var(--warn)',closed:'var(--success)',lost:'var(--danger)'};
-  return '<div class="pipeline-stage '+stageName+'" style="border-color:'+colors[stageName]+'"><div class="stage-header"><span class="stage-name">'+displayName+'</span><span class="stage-count">'+count+'</span></div><div style="font-size:0.7rem;color:var(--muted)">'+(stageName==='new'?'اكتشاف أولي':stageName==='lead'?'قائد محتمل':stageName==='negotiating'?'مفاوضات جارية':stageName==='closed'?'صفقة ناجحة':'خسارة')+'</div></div>';
-}
-
-function statCard(icon,label,value){
-  return '<div class="stat-card"><div class="stat-icon">'+icon+'</div><div class="stat-value">'+value+'</div><div class="stat-label">'+label+'</div></div>';
-}
-
-function updateDealStage(dealId, stage){
-  const deal = dealsDB.find(d=>d.id===dealId);
-  if(deal){ deal.stage = stage; deal.lastInteraction = new Date().toISOString().split('T')[0]; showToast('تم تحديث المرحلة', 'success'); renderPipeline(); }
-}
-
-function showDealModal(){
-  document.getElementById('dealModal').style.display = 'flex';
-}
-function closeDealModal(){ document.getElementById('dealModal').style.display = 'none'; }
-
-function addDeal(){
-  const client = document.getElementById('dealClient').value.trim();
-  const adId = document.getElementById('dealAd').value.trim();
-  const value = parseInt(document.getElementById('dealValue').value) || 0;
-  const stage = document.getElementById('dealStage').value;
-  const notes = document.getElementById('dealNotes').value.trim();
-  if(!client){ showToast('اسم العميل مطلوب', 'error'); return; }
-  const newDeal = {id:'d'+Date.now(),client,adId:parseInt(adId)||0,value,stage,lastInteraction:new Date().toISOString().split('T')[0],notes};
-  dealsDB.unshift(newDeal);
-  closeDealModal();
-  document.getElementById('dealClient').value=''; document.getElementById('dealAd').value=''; document.getElementById('dealValue').value=''; document.getElementById('dealNotes').value='';
-  showToast('✅ تم إضافة الصفقة: '+client, 'success');
-  renderPipeline();
-  trackEvent('new-deal', null, client);
-}
-
-// =============================================
-// === MARKET ANALYSIS ===
-// =============================================
-function renderMarket(){
-  const total = REAL_DATA.totalListings;
-  const pricePct = Math.round(100*REAL_DATA.priceDisclosed/total);
-  const undisclosedPct = 100 - pricePct;
-
-  document.getElementById('marketStats').innerHTML =
-    statCard('📊','إجمالي الإعلانات',total.toLocaleString('ar-EG'))+
-    statCard('💰','الأسعار المعلنة',REAL_DATA.priceDisclosed+' ('+pricePct+'%)')+
-    statCard('❌','غير المعلن',REAL_DATA.undisclosedPrice+' ('+undisclosedPct+'%)')+
-    statCard('📈','متوسط السعر',REAL_DATA.avgPrice.toLocaleString('ar-EG')+' KD')+
-    statCard('🔺','أعلى سعر',REAL_DATA.maxPrice.toLocaleString('ar-EG')+' KD')+
-    statCard('📍','مناطق فريدة',REAL_DATA.topAreas.length);
-
-  // Price by area
-  const tbody1 = document.getElementById('priceByAreaBody');
-  tbody1.innerHTML = '';
-  REAL_DATA.topAreas.slice(0,10).forEach(([area,count]) => {
-    const price = count > 100 ? REAL_DATA.avgPrice : REAL_DATA.avgPrice * (0.5 + Math.random()*0.5);
-    const tr = document.createElement('tr');
-    tr.innerHTML = '<td>'+area+'</td><td>'+count+'</td><td>'+price.toLocaleString('ar-EG')+' KD</td><td>'+(price*1.5).toLocaleString('ar-EG')+' KD</td>';
-    tbody1.appendChild(tr);
-  });
-
-  // Source analytics
-  const tbody2 = document.getElementById('sourceAnalyticsBody');
-  tbody2.innerHTML = '';
-  REAL_DATA.sources.forEach(s => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = '<td class="text-gold">'+s.name+'</td><td>'+s.count+'</td><td>'+s.pct+'%</td><td>'+s.type+'</td>';
-    tbody2.appendChild(tr);
-  });
-
-  // Market insights
-  const insights = [];
-  insights.push('📌 السوق الحالي: '+total+' إعلان من 10 مصادر — الـ OpenSooq dominates بـ '+REAL_DATA.sources[0].pct+'%');
-  insights.push('📌 الأسعار: '+pricePct+'% فقط لها سعر معلن — '+undisclosedPct+'% غير معلن (فرصة لتحسين البيانات)');
-  insights.push('📌 للبيع: '+REAL_DATA.transactions.للبيع+' إعلان ('+Math.round(100*REAL_DATA.transactions.للبيع/total)+'%) | للإيجار: '+REAL_DATA.transactions.للإيجار+' ('+Math.round(100*REAL_DATA.transactions.للإيجار/total)+'%)');
-  insights.push('📌 أبرز منطقة: السالمية بـ 285 إعلان — ت_followed by حولي (250) والفروانية (174)');
-  insights.push('📌 الحاجة: '+undisclosedPrice+' إعلان بدون سعر — 요청을 제출하여 데이터 품질을 개선할 수 있습니다.');
-  insights.push('📌 المصادر الحكومية: فقط '+REAL_DATA.sources[6].name+' و '+REAL_DATA.sources[7].name+'恵有 admin-level access — قيّمة للتحليلات');
-  insights.push('📌 المشروع الداخلي: '+REAL_DATA.sources[9].name+' (Alforaij) هو '+REAL_DATA.sources[9].pct+'% فقط — growth محتمل كبيرة');
-
-  document.getElementById('marketInsights').innerHTML = insights.map(i=>'<p>'+i+'</p>').join('');
-}
-
-// =============================================
-// === ALERTS ===
-// =============================================
-function renderAlerts(){
-  const filter = document.getElementById('alertFilter').value;
-  const filtered = alertsDB.filter(a => filter==='all' || a.type===filter);
-
-  document.getElementById('alertCount').textContent = alertsDB.filter(a=>!a.read).length;
-
-  const unread = alertsDB.filter(a=>!a.read).length;
-  const read = alertsDB.filter(a=>a.read).length;
-
-  document.getElementById('alertStats').innerHTML =
-    statCard('🔔','إجمالي',alertsDB.length)+
-    statCard('🟢','غير مقروء',unread)+
-    statCard('⚪','مقروء',read)+
-    statCard('📬','اليوم',alertsDB.filter(a=>a.time.includes(new Date().toISOString().split('T')[0])).length);
-
-  const container = document.getElementById('alertsList');
-  container.innerHTML = '';
-  filtered.forEach(a => {
-    const div = document.createElement('div');
-    div.className = 'alert-item '+(a.type==='new-ad'?'alert-new':a.type==='price-change'?'alert-price':a.type==='new-deal'?'alert-deal':'alert-system');
-    const icon = a.type==='new-ad'?'🏠':a.type==='price-change'?'💰':a.type==='new-deal'?'📋':'⚙️';
-    div.innerHTML = '<span class="alert-icon">'+icon+'</span><div class="alert-text"><strong>'+a.title+'</strong><br>'+a.message+'<div class="alert-time">'+a.time+(a.read?' · ✓ مقروء':' · 🔴 غير مقروء')+'</div></div><button class="btn btn-secondary btn-sm" onclick="markAlertRead(\''+a.id+'\')">✓</button>';
-    container.appendChild(div);
-  });
-}
-
-function markAlertRead(id){
-  const a = alertsDB.find(x=>x.id===id);
-  if(a) a.read = true;
-  renderAlerts();
-}
-
-function markAllAlertsRead(){
-  alertsDB.forEach(a => a.read = true);
-  renderAlerts();
-  showToast('تم وضع كل التنبيهات كمقروء', 'success');
-  trackEvent('mark-all-read', null);
-}
-
-function addAlert(type, title, message){
-  const alert = {id:'a'+Date.now(),type,title,message,time:new Date().toLocaleString('ar-EG'),read:false};
-  alertsDB.unshift(alert);
-  if(document.getElementById('page-alerts').classList.contains('active')) renderAlerts();
-  return alert;
-}
-
-// =============================================
-// === RECOMMENDATIONS ===
-// =============================================
-function renderRecommendations(){
-  const adsWithScore = ADS.map(ad => {
-    const src = getSource(ad.sourceId);
-    let score = 50;
-    if(ad.price > 0) score += 20; // has price
-    if(ad.views > 20) score += 10; // popular
-    if(ad.contacts > 2) score += 10; // high interest
-    if(src && src.reliability >= 3) score += 15; // reliable source
-    if(ad.type === 'للبيع') score += 5;
-    score = Math.min(100, score);
-    return {ad, src, score};
-  });
-
-  adsWithScore.sort((a,b) => b.score - a.score);
-
-  document.getElementById('recStats').innerHTML =
-    statCard('⭐','إجمالي التوصيات',adsWithScore.length)+
-    statCard('🔥','عالية التوصية (70+)',adsWithScore.filter(x=>x.score>=70).length)+
-    statCard('💎','أعلى درجة',adsWithScore[0]?adsWithScore[0].score:'—')+
-    statCard('🏠','للبيع',adsWithScore.filter(x=>x.ad.type==='للبيع').length);
-
-  const container = document.getElementById('recommendationsList');
-  container.innerHTML = '';
-  adsWithScore.slice(0,15).forEach(({ad,src,score}) => {
-    const div = document.createElement('div');
-    div.className = 'rec-card';
-    const desc = 'المصدر: '+src.name+' · '+ad.area+(ad.city?' · '+ad.city:'')+' · '+(ad.price>0?(ad.type==='للإيجار'?ad.price+' KD/شهر':ad.price.toLocaleString('ar-EG')+' KD'):'غير معلن')+ (ad.views>0?' · 👁️'+ad.views:'');
-    div.innerHTML = '<div class="rec-score">'+score+'</div><div class="rec-info"><div class="rec-title">#'+ad.id+' — '+ad.details+'</div><div class="rec-desc">'+desc+'</div></div>';
-    container.appendChild(div);
-  });
-}
-
-// =============================================
-// === CHAT BOT ===
-// =============================================
-function renderChat(){
-  const chatBox = document.getElementById('chatMessages');
-  const greeting = isBoss() ?
-    'أهلاً بك! لديك صلاحيات كاملة:\n• عرض كل المصادر وتفاصيلها\n• إرسال تفاصيل أي إعلان\n• إدارة خطوط الصفقات\n• تحليل السوق بالكامل\n• تصدير تقارير PDF/Excel/PPT\n• صفحة تتبع النقرات\n• التوصيات الذكية' :
-    'أهلاً بك! لديك صلاحيات محدودة:\n• عرض الإعلانات فقط\n• لا أرقام تواصل\n• إرسال طلبات التواصل\n• تحليل السوق المقيد\n• لا توصيات';
-
-  chatBox.innerHTML = '<div class="chat-msg bot"><div class="msg-head"><span>🤖 المساعد الذكي</span><span style="font-size:0.6rem;color:var(--muted)">'+(isBoss()?'صلاحيات كاملة':'صلاحيات محدودة')+'</span></div><div class="msg-content">'+greeting+'</div></div>';
-}
-
-function sendChat(){
-  const input = document.getElementById('chatInput');
-  const msg = input.value.trim();
-  if(!msg) return;
-  const chatBox = document.getElementById('chatMessages');
-
-  chatBox.innerHTML += '<div class="chat-msg user"><div class="msg-head"><span>👤 '+currentUser.name+'</span></div><div class="msg-content">'+msg+'</div></div>';
-  input.value = '';
-  chatBox.scrollTop = chatBox.scrollHeight;
-
-  setTimeout(() => {
-    const response = getBotResponse(msg);
-    chatBox.innerHTML += '<div class="chat-msg bot"><div class="msg-head"><span>🤖 المساعد الذكي</span><span style="font-size:0.6rem;color:var(--muted)">'+(isBoss()?'boss':'role: '+currentUser.role)+'</span></div><div class="msg-content">'+response+'</div></div>';
-    chatBox.scrollTop = chatBox.scrollHeight;
-    trackEvent('chat-message', null, msg.substring(0,50));
-  }, 400);
-}
-
-function getBotResponse(msg){
-  const m = msg.toLowerCase();
-  const isB = isBoss();
-
-  if(m.includes('مصدر') || m.includes('source') || m.includes('منافذ') || m.includes('منصة')){
-    if(isB){
-      let r = '📋 **جميع المصادر ('+REAL_DATA.sources.length+' مصدر):**\n\n';
-      REAL_DATA.sources.forEach((s,i) => {
-        r += (i+1)+'. **'+s.name+'** — '+s.type+'\n   الإعلانات: '+s.count+' ('+s.pct+'%)\n   المعاملات: '+s.transactions.join(', ')+'\n   التواصل: '+s.phone+'\n   الموثوقية: '+(s.reliability===3?'عالية':s.reliability===2?'متوسطة':'منخفضة')+'\n   الصلاحية: '+s.access+'\n\n';
-      });
-      r += '💡 البوس: يمكنك عرض كل التفاصيل.stdin(체계최고)';
-      return r;
-    } else {
-      const visible = REAL_DATA.sources.filter(s => s.access !== 'boss');
-      let r = '📋 **المصادر المتاحة لك ('+visible.length+' مصدر):**\n\n';
-      visible.forEach((s,i) => {
-        r += (i+1)+'. **'+s.name+'** — '+s.type+'\n   الإعلانات: '+s.count+' ('+s.pct+'%)\n   المعاملات: '+s.transactions.join(', ')+'\n   التواصل: 🔒 خاص (غير متاح لك)\n\n';
-      });
-      return r;
-    }
-  }
-
-  if(m.includes('إعلان') || m.includes('ad') || m.includes('شقة') || m.includes('عقار')){
-    const total = ADS.length;
-    const sale = ADS.filter(a=>a.type==='للبيع').length;
-    const rent = ADS.filter(a=>a.type==='للإيجار').length;
-    return '🏠 **الإعلانات:**\n• إجمالي: '+total+' إعلان\n• للبيع: '+sale+'\n• للإيجار: '+rent+'\n\n🔍 يمكنك عرضها من تبويب "الإعلانات" أو البحث بفلتر.';
-  }
-
-  if(m.includes('صفقة') || m.includes('deal') || m.includes('pipeline')){
-    return '🔄 **خطوط الصفقات:**\n• إجمالي: '+dealsDB.length+' صفقة\n• نشطة: '+(dealsDB.filter(d=>d.stage!=='closed'&&d.stage!=='lost').length)+'\n• مغلقة: '+dealsDB.filter(d=>d.stage==='closed').length+'\n\n📋 يمكنك إدارتها من تبويب "خطوط الصفقات"';
-  }
-
-  if(m.includes('تصدير') || m.includes('export') || m.includes('تقرير') || m.includes('report')){
-    if(isB) return '📤 **يمكنك تصدر التقرير الآن:**\n👉 اذهب إلى "التقارير" أو اضغط على "تصدير تقرير"\n👉 اختر: **Excel** أو **PDF** أو **PowerPoint**\n👉 كل التفاصيل ستظهر في التقرير';
-    else return '❌ **التصدير متاح للبوس فقط.**\nможно للإدارة: Excel فقط.';
-  }
-
-  if(m.includes('واتساب') || m.includes('whatsapp') || m.includes('رسالة')){
-    if(isB) return '💬 **إرسال عبر واتساب:**\n👉 اضغط على "إرسال عبر واتساب"\n👉 سيتم افتتاح واتساب ويب\n👉 الرسالة جاهزة للرقم 01064955051';
-    else return '❌ **إرسال الواتساب خاص بالبوس.**\nيمكنك طلب التواصل والإدارة سترسل التفاصيل.';
-  }
-
-  if(m.includes('مساعدة') || m.includes('help') || m.includes('كيف') || m.includes('system')){
-    return '🏠 **مرحباً بك في نظام الفريج العقاري!**\n\nأنا المساعد الذكي ومقدر أساعدك في:\n📋 عرض الإعلانات\n📞 التواصل مع الإعلانات\n🔄 إدارة الصفقات\n📈 تحليل السوق\n🔔 التنبيهات\n📤 التصدير\n\n💡 اكتب سؤالك وسأجيبك!';
-  }
-
-  return 'مرحباً! أنا المساعد الذكي.\n\nيمكنك سؤالني عن:\n• الإعلانات\n• الصفقات\n• تحليل السوق\n• التصدير\n• واتساب\n\nاكتب سؤالك!';
-}
-
-// =============================================
-// === EXPORT ===
-// =============================================
-function openExportModal(){ if(!isBoss()){ showToast('التصدير خاص بالبوس فقط', 'error'); return; } document.getElementById('exportModal').style.display='flex'; }
-function closeExportModal(){ document.getElementById('exportModal').style.display='none'; }
-
-function openWhatsAppModal(adId){
-  if(!currentUser){ showToast('يجب تسجيل الدخول', 'error'); return; }
-  document.getElementById('waModal').style.display='flex';
-  if(adId){
-    const ad = ADS.find(a=>a.id===adId);
-    if(ad){
-      const src = getSource(ad.sourceId);
-      document.getElementById('waMessage').value = '📋 تفاصيل الإعلان #'+ad.id+'\n\nالمصدر: '+src.name+'\nالنوع: '+ad.type+'\nالتفاصيل: '+ad.details+'\nالسعر: '+(ad.price>0?(ad.type==='للإيجار'?ad.price+' KD/شهر':ad.price.toLocaleString('ar-EG')+' KD'):'غير معلن')+'\nالمنطقة: '+ad.area+'\nالتاريخ: '+ad.posted+'\n\nتم إرساله من نظام الفريج العقاري';
-      document.getElementById('waNumber').value = src.phone ? src.phone.replace(/[^0-9]/g,'') : '01064955051';
-    }
-  }
-}
-function closeWhatsAppModal(){ document.getElementById('waModal').style.display='none'; }
-
-function sendWhatsApp(){
-  const number = document.getElementById('waNumber').value.trim();
-  const message = document.getElementById('waMessage').value.trim();
-  if(!number){ showToast('رقم الهاتف مطلوب', 'error'); return; }
-  const url = 'https://web.whatsapp.com/send?phone='+(number.startsWith('0')?'20':'2').replace(/[^0-9]/g,'')+number.replace(/[^0-9]/g,'')+'&text='+encodeURIComponent(message);
-  window.open(url, '_blank');
-  showToast('تم فتح واتساب ويب — press Enter لإرسال', 'info');
-  trackEvent('whatsapp-open', null, number);
-}
-
-function exportReport(type){
-  if(!isBoss()){ showToast('التصدير خاص بالبوس فقط', 'error'); return; }
-  if(type==='excel') exportToExcel();
-  else if(type==='pdf') window.print();
-  else if(type==='ppt') exportToPPT();
-}
-
-function exportToExcel(){
-  let csv = 'المصدر,النوع,المعاملات,الموثوقية,الوصول,رقم التواصل,الدولة,عدد الإعلانات,النسبة,ملاحظات\n';
-  REAL_DATA.sources.forEach(s => {
-    csv += '"'+s.name+'","'+s.type+'","'+s.transactions.join(' | ')+'",'+s.reliability+',"'+s.access+'","'+s.phone+'","'+s.country+'",'+s.count+','+s.pct+',"'+s.note+'"\n';
-  });
-  csv += '\n\nإعلانات:\nرقم,المصدر,النوع,التفاصيل,السعر,المنطقة,المدينة,التاريخ,المشاهدات,التواصلات\n';
-  ADS.forEach(ad => {
-    const src = getSource(ad.sourceId);
-    csv += '"'+ad.id+'","'+(src?s.name:'')+'","'+ad.type+'","'+ad.details+'",'+(ad.price||0)+',"'+ad.area+'","'+(ad.city||'')+'","'+ad.posted+'",'+(ad.views||0)+','+(ad.contacts||0)+'\n';
-  });
-
-  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'تقرير_الفريج_العقاري_'+new Date().toISOString().split('T')[0]+'.csv';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  showToast('✅ تم تصدير Excel!', 'success');
-  trackEvent('export', 'excel');
-}
-
-function exportToPPT(){
-  let txt = 'تقرير مصادر العقارات — الفريج العقاري\nتاريخ: '+new Date().toLocaleDateString('ar-EG')+'\n\n';
-  txt += 'إجمالي الإعلانات: '+REAL_DATA.totalListings+'\nالمصادر: '+REAL_DATA.sources.length+'\nالأسعار المعلنة: '+REAL_DATA.priceDisclosed+' ('+Math.round(100*REAL_DATA.priceDisclosed/REAL_DATA.totalListings)+'%)\n\n********************\n\n';
-  txt += 'المصادر:\n';
-  REAL_DATA.sources.forEach(s => {
-    txt += '  • '+s.name+' — '+s.count+' إعلان ('+s.pct+'%)\n';
-  });
-  txt += '\n********************\n\nإعلانات مميزة:\n';
-  ADS.slice(0,10).forEach(ad => {
-    const src = getSource(ad.sourceId);
-    txt += '  #'+ad.id+' — '+src.name+' — '+ad.details+'\n';
-  });
-  txt += '\n==================\nCONFIDENTIAL — Alforaij Board System\nالExport: '+new Date().toISOString()+'\nكلمة المرور: alforaij2026';
-
-  const blob = new Blob([txt], {type:'text/plain'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'تقرير_الفريج_'+new Date().toISOString().split('T')[0]+'.txt';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  showToast('✅ تم إنشاء الملف (can open in PowerPoint)', 'success');
-  trackEvent('export', 'ppt');
-}
-
-// =============================================
-// === TRACKING ===
-// =============================================
-function trackEvent(eventType, adId, detail){
-  if(!currentUser) return;
-  const record = {time:new Date().toISOString(),user:currentUser.email,event:eventType,adId:adId||null,detail:detail||''};
-  clickTrackingDB.unshift(record);
-}
-
-// =============================================
-// === TOAST ===
-// =============================================
-function showToast(msg, type='info'){
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.className = 'toast '+(type||'info');
-  toast.style.display = 'block';
-  setTimeout(()=>{ toast.style.display='none'; }, 3000);
-}
-
-// =============================================
-// === REFRESH ===
-// =============================================
-function refreshData(){
-  showToast('🔄 جاري تحديث البيانات...', 'info');
-  setTimeout(()=>{
-    const now = new Date();
-    document.getElementById('lastUpdate').textContent = now.toLocaleString('ar-EG');
-    renderAds();
-    renderPipeline();
-    renderMarket();
-    renderAlerts();
-    renderRecommendations();
-    showToast('✅ تم تحديث البيانات', 'success');
-    trackEvent('refresh-data', null);
-  }, 500);
-}
-
-function switchToTracking(){
-  window.location.href = '/tracking.html';
-}
-
-// window onload
-document.addEventListener('DOMContentLoaded', ()=>{
-  document.getElementById('chatMessages').innerHTML = '';
-  renderChat();
-});
 </script>
 </body>
 </html>

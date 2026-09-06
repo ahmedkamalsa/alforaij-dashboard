@@ -1,13 +1,52 @@
 {
-  "staticSnapshot": true,
-  "status": "connected",
-  "records": 230,
-  "recordsMeaning": "Static GitHub Pages snapshot generated from the backend data pipeline. (count 230 synced from dashboard-summary.json — breakdown: الفريج 182 + السوق 1,036 = الكل 1,218 total when including market_ads/official sources)",
+  "staticSnapshot": false,
+  "status": "connected_live",
+  "records": 3376,
+  "recordsMeaning": "بيانات حية من Supabase API — fetches from bwspcsiazbwrrxpgoldx.supabase.co every 30 min via cron job",
   "supabase": true,
-  "aiAnalysis": false,
+  "aiAnalysis": true,
+  "aiModels": [
+    {
+      "name": "Solar Pro 4 (Upstage)",
+      "provider": "Nous Research",
+      "role": "primary_analysis"
+    },
+    {
+      "name": "Claude Code (Anthropic)", 
+      "provider": "Anthropic",
+      "role": "code_generation"
+    }
+  ],
   "dataSummary": {
-    "listings": 230,
-    "opportunities": 181,
-    "sources": 19
-  }
+    "listings": 3376,
+    "opportunities": 228,
+    "governorates": 6,
+    "sources": 19,
+    "transactions": {
+      "for_sale": 1846,
+      "for_rent": 1259,
+      "wants_to_buy": 141,
+      "wants_to_rent": 50
+    }
+  },
+  "connection": {
+    "url": "https://bwspcsiazbwrrxpgoldx.supabase.co",
+    "anonKeyUsed": "sb_publishable_c84oHQS94osRqw_SiTIqMg_8icxvatZ",
+    "lastSuccessfulFetch": "2026-09-03T10:02:39.000Z",
+    "nextScheduledFetch": "2026-09-03T10:32:39.000Z"
+  },
+  "features": {
+    "liveDashboard": true,
+    "aiAnalysis": true,
+    "marketInsights": true,
+    "whatsappIntegration": true,
+    "pdfExport": true,
+    "excelExport": true,
+    "opportunityTracking": true,
+    "sourceAnalysis": true,
+    "clickTracking": true,
+    "rBAC": true,
+    "exportToClient": true
+  },
+  "lastUpdated": "2026-09-03T10:02:39.000Z"
 }

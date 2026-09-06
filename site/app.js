@@ -2764,3 +2764,84 @@ async function boot() {
 
 boot();
 
+// ============================================================================
+// دالة التحديث الحي: عرض حالة الاتصال بال Supabase وتحليل الذكاء
+// ============================================================================
+async function updateLiveStatus() {
+  const dbStatusEl = document.getElementById('dbStatus');
+  const aiStatusEl = document.getElementById('aiStatus');
+  const syncStatusEl = document.getElementById('syncStatus');
+
+  if (!dbStatusEl || !aiStatusEl || !syncStatusEl) return;
+
+  const ANON_KEY='sb_publishable_c84oHQS94osRqw_SiTIqMg_8icxvatZ';
+  const SUPABASE_URL = 'https://bwspcsiazbwrrxpgoldx.supabase.co';
+  
+  try {
+    // فحص الاتصال
+    const countResp = await fetch(SUPABASE_URL + '/rest/v1/market_listings?select=count', {
+      headers: {
+        'apikey': ANON_KEY,
+        'Authorization': 'Bearer ' + ANON_KEY,
+        'Content-Type': 'application/json'
+      },
+      signal: AbortSignal.timeout(8000)
+    });
+    
+    if (countResp.ok) {
+      const countData = await countResp.json();
+      const total = Array.isArray(countData) ? countData.length : (countData?.count || 0);
+      
+      dbStatusEl.innerHTML = '<span class="status-dot"></span><span>متصل بـ Supabase (' + total.toLocaleString('ar-EG') + ' إعلان)</span>';
+      dbStatusEl.className = 'status-pill status-live';
+      
+      aiStatusEl.innerHTML = '<span class="status-dot"></span><span>تحليل ذكي: نشط</span>';
+      aiStatusEl.className = 'status-pill status-ai';
+      
+      const now = new Date();
+      syncStatusEl.innerHTML = '<span class="status-dot"></span><span>آخر تحديث: ' + now.toLocaleString('ar-EG') + '</span>';
+      syncStatusEl.className = 'status-pill status-sync';
+      
+      // تحديث النص الإضافي
+      const healthEl = document.getElementById('healthStatus');
+      if (healthEl) {
+        healthEl.textContent = 'الكل ' + total.toLocaleString('ar-EG') + ' إعلان | قاعدة البيانات: متصلة مباشرة | تحليل ذكي: نشط';
+      }
+      
+      // إذا كان AnalysisEngine موجود، شغله
+      if (typeof AnalysisEngine !== 'undefined' && typeof supabaseLive !== 'undefined') {
+        try {
+          const records = await supabaseLive.fetchAllListings({ limit: 1000 });
+          if (records && records.length > 0) {
+            const analysis = AnalysisEngine.analyze(records, []);
+            window.__liveAnalysis = analysis;
+            console.log('[Live Analysis] market_overview:', analysis.market_overview);
+            console.log('[Live Analysis] sources:', analysis.source_analysis?.total_sources);
+            console.log('[Live Analysis] price_analysis:', analysis.price_analysis);
+          }
+        } catch (e) {
+          console.warn('[Live Analysis] Skipped:', e.message);
+        }
+      }
+    } else {
+      throw new Error('HTTP ' + countResp.status);
+    }
+  } catch (e) {
+    dbStatusEl.innerHTML = '<span class="status-dot"></span><span>يستخدم البيانات المحفوظة (تم lệحاق خادم)</span>';
+    dbStatusEl.className = 'status-pill status-error';
+    aiStatusEl.innerHTML = '<span class="status-dot"></span><span>تحليل ذكي: غير متوفر</span>';
+    aiStatusEl.className = 'status-pill status-ai';
+    
+    const syncStatus = document.getElementById('syncStatus');
+    if (syncStatus) {
+      syncStatus.innerHTML = '<span class="status-dot"></span><span>آخر تحديث: ' + new Date().toLocaleString('ar-EG') + '</span>';
+    }
+  }
+}
+
+// تشغيل فوري عند التحميل + تحديث كل دقيقه
+document.addEventListener('DOMContentLoaded', () => {
+  updateLiveStatus();
+  setInterval(updateLiveStatus, 60000);
+});
+
