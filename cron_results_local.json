@@ -1,0 +1,92 @@
+[
+  {
+    "cron_id": "cron_health_20260907_0549",
+    "host": "DESKTOP-2U21BL4",
+    "timestamp": "2026-09-07T05:49:37.904984+03:00",
+    "overall": "WARNING",
+    "checks": {
+      "docker": {
+        "status": "RUNNING",
+        "severity": "info",
+        "details": "Docker Desktop daemon running."
+      },
+      "ram": {
+        "status": "OK",
+        "severity": "info",
+        "details": "3223.2 MB free / 16263.4 MB total (19.8%) — threshold: 500 MB"
+      },
+      "disk": {
+        "status": "OK",
+        "severity": "warning",
+        "details": "21 GB free / 196 GB total (10.7% free) — threshold: 10.0%"
+      },
+      "hermes_agents": {
+        "status": "OK",
+        "severity": "info",
+        "details": "4 Hermes agents running (PIDs: 3668, 19360, 1160, 13656)"
+      },
+      "git": {
+        "status": "UNCOMMITTED_CHANGES",
+        "severity": "warning",
+        "details": "Modified: ['site/static-data/live-db.json']. Untracked: 21 files"
+      }
+    },
+    "docker_status": "RUNNING",
+    "ram_free_mb": 3223.2,
+    "ram_total_mb": 16263.4,
+    "disk_free_gb": 21,
+    "disk_total_gb": 196,
+    "disk_free_pct": 10.7,
+    "hermes_agent_count": 4,
+    "hermes_pids": "3668, 19360, 1160, 13656",
+    "git_modified": "site/static-data/live-db.json",
+    "git_untracked_count": 21,
+    "git_status": "UNCOMMITTED_CHANGES",
+    "details": "{\n  \"docker\": {\n    \"status\": \"RUNNING\",\n    \"severity\": \"info\",\n    \"details\": \"Docker Desktop daemon running.\"\n  },\n  \"ram\": {\n    \"status\": \"OK\",\n    \"severity\": \"info\",\n    \"details\": \"3223.2 MB free / 16263.4 MB total (19.8%) — threshold: 500 MB\"\n  },\n  \"disk\": {\n    \"status\": \"OK\",\n    \"severity\": \"warning\",\n    \"details\": \"21 GB free / 196 GB total (10.7% free) — threshold: 10.0%\"\n  },\n  \"hermes_agents\": {\n    \"status\": \"OK\",\n    \"severity\": \"info\",\n    \"details\": \"4 Hermes agents running (PIDs: 3668, 19360, 1160, 13656)\"\n  },\n  \"git\": {\n    \"status\": \"UNCOMMITTED_CHANGES\",\n    \"severity\": \"warning\",\n    \"details\": \"Modified: ['site/static-data/live-db.json']. Untracked: 21 files\"\n  }\n}"
+  },
+  {
+    "cron_id": "cron_health_20260907_1304",
+    "host": "DESKTOP-2U21BL4",
+    "timestamp": "2026-09-07T10:08:45Z",
+    "overall": "WARNING",
+    "checks": {
+      "docker": {
+        "status": "RUNNING",
+        "severity": "info",
+        "details": "Docker Desktop daemon running. 0 containers."
+      },
+      "ram": {
+        "status": "OK",
+        "severity": "info",
+        "details": "5519 MB free / 16263 MB total (33.9%) — threshold: 500 MB"
+      },
+      "disk": {
+        "status": "OK",
+        "severity": "info",
+        "details": "29 GB free / 196 GB total (14.8% free) — threshold: 10.0%"
+      },
+      "hermes_agents": {
+        "status": "OK",
+        "severity": "info",
+        "details": "5 Hermes agents running (PIDs: 2892, 3668, 19360, 1160, 13656)"
+      },
+      "git": {
+        "status": "UNCOMMITTED_CHANGES",
+        "severity": "warning",
+        "details": "Modified: ['site/last-updated.json', 'site/static-data/live-db.json']. Untracked: 14 files"
+      }
+    },
+    "docker_status": "RUNNING",
+    "ram_free_mb": 5519.0,
+    "ram_total_mb": 16263.4,
+    "disk_free_gb": 29.0,
+    "disk_total_gb": 196.0,
+    "disk_free_pct": 14.8,
+    "hermes_agent_count": 5,
+    "hermes_pids": "2892,3668,19360,1160,13656",
+    "git_modified": "site/last-updated.json,site/static-data/live-db.json",
+    "git_untracked_count": 14,
+    "git_status": "UNCOMMITTED_CHANGES",
+    "details": "{\"docker\": {\"status\": \"RUNNING\", \"severity\": \"info\", \"details\": \"Docker Desktop daemon running. 0 containers.\"}, \"ram\": {\"status\": \"OK\", \"severity\": \"info\", \"details\": \"5519 MB free / 16263 MB total (33.9%) \\u2014 threshold: 500 MB\"}, \"disk\": {\"status\": \"OK\", \"severity\": \"info\", \"details\": \"29 GB free / 196 GB total (14.8% free) \\u2014 threshold: 10.0%\"}, \"hermes_agents\": {\"status\": \"OK\", \"severity\": \"info\", \"details\": \"5 Hermes agents running (PIDs: 2892, 3668, 19360, 1160, 13656)\"}, \"git\": {\"status\": \"UNCOMMITTED_CHANGES\", \"severity\": \"warning\", \"details\": \"Modified: ['site/last-updated.json', 'site/static-data/live-db.json']. Untracked: 14 files\"}}"
+  }
+]

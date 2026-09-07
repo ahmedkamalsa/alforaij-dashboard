@@ -1,0 +1,62 @@
+{
+  "timestamp_utc": "2026-09-07T10:04:38Z",
+  "timestamp_kuwait": "2026-09-07 13:04:38 +0300",
+  "checks": {
+    "docker": {
+      "status": "running",
+      "containers": 0,
+      "alert": null
+    },
+    "ram": {
+      "free_mb": 5519,
+      "total_mb": 16263,
+      "threshold_mb": 500,
+      "status": "ok",
+      "alert": null
+    },
+    "hermes_agents": {
+      "count": 5,
+      "pids": [2892, 3668, 19360, 1160, 13656],
+      "status": "ok",
+      "alert": null
+    },
+    "disk": {
+      "path": "C:/Users/hello",
+      "total_gb": 196,
+      "free_gb": 29,
+      "free_percent": 14.8,
+      "threshold_percent": 10,
+      "status": "ok",
+      "alert": null
+    },
+    "git_alforaijboard": {
+      "path": "/c/Users/hello/alforaijboard-gh",
+      "branch": "main",
+      "status": "dirty",
+      "modified": ["site/last-updated.json", "site/static-data/live-db.json"],
+      "untracked_count": 14,
+      "untracked_files": [
+        "_health_report_20260906.txt",
+        "_health_report_20260906_0924.txt",
+        "_health_report_20260906_2015.json",
+        "_health_report_20260906_2015.txt",
+        "_inspect_cron.py",
+        "_test_supabase.py",
+        "cron_results_local.json",
+        "fetch_supabase_data.py",
+        "supabase/",
+        "supabase_data/market_developments.json",
+        "supabase_data/market_listings.json",
+        "supabase_data/sources.json",
+        "sync_live_db.py"
+      ],
+      "alert": "UNCOMMITTED CHANGES: 2 modified + 14 untracked files"
+    }
+  },
+  "supabase_logging": {
+    "status": "failed",
+    "reason": "Missing .env file — SUPABASE_URL and SUPABASE_KEY not available",
+    "local_log_path": "/c/Users/hello/alforaijboard-gh/cron_results_local.json"
+  },
+  "summary": "Docker running (0 containers). RAM 5,519 MB free (OK). 5 Hermes agents alive (PIDs 2892, 3668, 19360, 1160, 13656). Disk C: 14.8% free (OK). Git repo DIRTY — 2 modified + 14 untracked. Supabase logging FAILED — .env missing."
+}

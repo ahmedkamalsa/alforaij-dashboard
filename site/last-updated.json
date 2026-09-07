@@ -1,19 +1,7 @@
 {
-  "generated_at": "2026-08-09T18:41:01+03:00",
-  "entrypoint": "index.html",
-  "dashboard_variant": "evidence-opportunity-platform",
-  "record_count": 230,
-  "opportunities_scored": 181,
-  "opportunities_visible": 58,
-  "market_matching_requests": 36,
-  "platforms": [
-    "الفريج",
-    "OpenSooq",
-    "Mourjan",
-    "بوشملان",
-    "الحسبة"
-  ],
-  "downloads": [
-    "downloads/offer-evidence.xlsx"
-  ]
+  "generated_at": "2026-09-07T12:16:17.818498+00:00",
+  "last_synced": "2026-09-07 12:16:17 UTC",
+  "record_count": 3912,
+  "source": "supabase_market_listings",
+  "project": "https://bwspcsiazbwrrxpgoldx.supabase.co"
 }
