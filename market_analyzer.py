@@ -18,6 +18,7 @@ except ImportError:
 
 from supabase_integration import fetch_listings, fetch_listing_count, quick_status
 from local_api import chat, quick_status as api_status
+from egress_optimizer import get_cached_listings
 
 # ── إعدادات ──────────────────────────────────────────────────────────────
 

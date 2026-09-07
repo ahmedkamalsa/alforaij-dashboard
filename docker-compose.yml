@@ -1,6 +1,10 @@
 # docker-compose.yml — نظام أتمتة السوق العقاري الكويتي
 # المشروع: alforaijboard / bwspcsiazbwrrxpgoldx
 # يستخدم LM Studio Local LLM + Supabase
+# يدير 3 حاويات: market-analyzer, supabase-sync, monitor
+#
+# ملاحظة: الـ Local LLM API يعمل على الجهاز المضيف (localhost:1234)
+# للحاويات للوصول له، نستخدم host.docker.internal (Docker Desktop على Windows)
 
 version: '3.8'
 
@@ -14,10 +18,14 @@ services:
       - SUPABASE_URL=${SUPABASE_URL}
       - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
       - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
+      - LOCAL_API_URL=http://host.docker.internal:1234/v1/chat/completions
     volumes:
       - ./cron_logs:/app/cron_logs
       - ./reports:/app/reports
       - ./notifications:/app/notifications
+      - ./cache:/app/cache
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     restart: unless-stopped
     # يشغل كل 24 ساعة
     # يمكن استخدام cron داخل الحاوية أو الاعتماد على الخارج
@@ -33,6 +41,7 @@ services:
       - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
     volumes:
       - ./site/static-data:/app/site/static-data
+      - ./cache:/app/cache
     restart: unless-stopped
 
   # ─── نظام المراقبة ────────────────────────────────────────────
@@ -43,11 +52,15 @@ services:
     environment:
       - SUPABASE_URL=${SUPABASE_URL}
       - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - LOCAL_API_URL=http://host.docker.internal:1234/v1/chat/completions
     volumes:
       - ./cron_logs:/app/cron_logs
       - ./notifications:/app/notifications
+      - ./cache:/app/cache
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     restart: unless-stopped
-    # يشغل كل ساعة للتحقق من صحة النظام
+    # يشغّل كل ساعة للتحقق من صحة النظام
 
   # ─── واجهة تحكم بسيطة (اختياري) ──────────────────────────────
   dashboard:
