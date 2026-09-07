@@ -50,13 +50,23 @@ TASKS = [
 ]
 
 
+# استخدم التاريخ بصيغة правиль
+from datetime import date
+TODAY = date.today().strftime("%m/%d/%Y")
+
 def create_task(task):
+    schedule_type = task["schedule"]
     cmd = [
         "schtasks", "/create", "/tn", task["tn"], "/tr", task["command"],
-        "/sc", task["schedule"], "/st", task.get("start_time", "00:00"),
-        "/f", "/rl", "highest", "/sd", "2026-09-07",
-        "/mo", "1" if task["schedule"] == "hourly" else "1",
+        "/sc", schedule_type,
     ]
+    if schedule_type == "daily":
+        cmd += ["/st", task.get("start_time", "09:00"), "/sd", TODAY, "/mo", "1"]
+    elif schedule_type == "hourly":
+        cmd += ["/st", task.get("start_time", "00:00"), "/sd", TODAY, "/h", "1"]
+    elif schedule_type == "weekly":
+        cmd += ["/st", task.get("start_time", "00:00"), "/sd", TODAY, "/d", "MON", "/mo", "1"]
+    cmd += ["/f", "/rl", "highest"]
     print(f"Creating: {task['tn']}")
     print(f"  Description: {task['desc']}")
     print(f"  Schedule: {task['schedule']} at {task.get('start_time', '00:00')}")
