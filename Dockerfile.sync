@@ -1,0 +1,14 @@
+# Dockerfile.sync — تحديث قاعدة البيانات الحية
+FROM python:3.12-slim
+WORKDIR /app
+
+RUN pip install --no-cache-dir requests
+
+COPY supabase_integration.py .
+COPY update_live_db.py .
+
+ENV PYTHONUNBUFFERED=1
+
+# تشغيل تحديث دوري (كل 6 ساعات كمثال)
+# يمكن استخدام cron أو واجب خارجي يبدأ الحاوية
+CMD ["python", "update_live_db.py"]
