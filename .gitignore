@@ -30,3 +30,52 @@ cache/
 notifications/
 reports/
 cron_logs/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment
+.env
+.env.local
+.env.*.local
+*.env
+
+# Secrets - NEVER commit
+*_key*
+*_secret*
+secrets.json
+credentials.json
+*.pem
+*.key
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+
+# Supabase local
+supabase/
+supabase/.branches/
+supabase/debug/
+supabase/functions/
+supabase/repo/
+supabase/types/
+supabase/.temp/
+
+# Local data
+cron_results/*.json
+cron_results/*.json.synced
+supabase_data/*.json
+
+# Temp
+tmp/
+temp/
+.cache/

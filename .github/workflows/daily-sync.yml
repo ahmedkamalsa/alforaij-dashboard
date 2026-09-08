@@ -1,0 +1,16 @@
+name: Daily Supabase Sync
+on:
+  schedule: [{ cron: '0 3 * * *' }]
+  workflow_dispatch:
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+      SUPABASE_URL: https://bwspcsiazbwrrxpgoldx.supabase.co
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: python update_source_stats.py
+      - run: python update_live_db.py
