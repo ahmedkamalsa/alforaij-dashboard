@@ -1,0 +1,18 @@
+# Dockerfile.market — سكربت تحليل السوق اليومي
+FROM python:3.12-slim
+WORKDIR /app
+
+# تثبيت التبعيات
+RUN pip install --no-cache-dir requests
+
+# نسخ السكربتات
+COPY supabase_integration.py .
+COPY local_api.py .
+COPY market_analyzer.py .
+COPY cron_market_daily.py .
+
+# برينت الإعدادات
+ENV PYTHONUNBUFFERED=1
+
+# تشغيل الكرون اليومي
+CMD ["python", "cron_market_daily.py"]

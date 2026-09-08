@@ -1,0 +1,14 @@
+# Dockerfile.monitor — نظام المراقبة
+FROM python:3.12-slim
+WORKDIR /app
+
+RUN pip install --no-cache-dir requests
+
+COPY supabase_integration.py .
+COPY local_api.py .
+COPY monitor.py .
+
+ENV PYTHONUNBUFFERED=1
+
+# تشغيل المراقبة كل 15 دقيقة
+CMD ["python", "monitor.py"]
