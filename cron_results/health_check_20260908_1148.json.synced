@@ -1,0 +1,68 @@
+{
+  "timestamp": "2026-09-08T11:48:38.518795+00:00",
+  "timestamp_short": "20260908_1148",
+  "overall_status": "error",
+  "summary": "⚠️ docker: error — Docker daemon غير متاح — خدمة Docker Desktop ليست نشطة\n⚠️ ram: warning — ⚠️ RAM حرة قليلة: 8MB فقط (الحد 500MB)\n⚠️ agents: warning — ⚠️ لا توجد عمليات وكلاء/agents قيد التشغيل (python/node/uv)\n⚠️ git: warning — ⚠️ 7 تغيير(g) غير ماضية في الـ Git",
+  "duration_ms": 1827,
+  "checks": {
+    "docker": {
+      "status": "error",
+      "message": "Docker daemon غير متاح — خدمة Docker Desktop ليست نشطة",
+      "containers": 0
+    },
+    "ram": {
+      "status": "warning",
+      "message": "⚠️ RAM حرة قليلة: 8MB فقط (الحد 500MB)",
+      "free_mb": 7.9,
+      "total_mb": 15.9
+    },
+    "agents": {
+      "status": "warning",
+      "message": "⚠️ لا توجد عمليات وكلاء/agents قيد التشغيل (python/node/uv)",
+      "count": 0,
+      "pids": []
+    },
+    "disk": {
+      "status": "ok",
+      "message": "مساحة القرص كافية: 30.5GB حرة (14.5% free) من 210.3GB",
+      "free_gb": 30.5,
+      "total_gb": 210.3,
+      "use_percent": 85.5,
+      "free_percent": 14.5
+    },
+    "git": {
+      "status": "warning",
+      "message": "⚠️ 7 تغيير(g) غير ماضية في الـ Git",
+      "changes": [
+        {
+          "status": "M",
+          "file": "_test_supabase.py"
+        },
+        {
+          "status": "M",
+          "file": "site/last-updated.json"
+        },
+        {
+          "status": "M",
+          "file": "site/static-data/live-db.json"
+        },
+        {
+          "status": "??",
+          "file": "cron_results/"
+        },
+        {
+          "status": "??",
+          "file": "cron_results_20260907_1713.json"
+        },
+        {
+          "status": "??",
+          "file": "sync_cron_to_supabase.py"
+        },
+        {
+          "status": "??",
+          "file": "system_health_check.py"
+        }
+      ]
+    }
+  }
+}

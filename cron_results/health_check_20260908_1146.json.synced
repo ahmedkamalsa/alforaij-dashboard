@@ -1,0 +1,68 @@
+{
+  "timestamp": "2026-09-08T11:46:52.244647+00:00",
+  "timestamp_short": "20260908_1146",
+  "overall_status": "error",
+  "summary": "⚠️ docker: error — Docker daemon غير متاح: \n⚠️ ram: error — ما عرفت نقيس RAM: 'Format-List' is not recognized as an internal or external com\n⚠️ agents: warning — ⚠️ لا توجد عمليات وكلاء/agents قيد التشغيل (python/node/hermes)\n⚠️ git: warning — ⚠️ 7 change(s) غي ri ماضية في الـ Git:\n  M _test_supabase.py\n  M site/last-updat",
+  "duration_ms": 1634,
+  "checks": {
+    "docker": {
+      "status": "error",
+      "message": "Docker daemon غير متاح: ",
+      "containers": 0
+    },
+    "ram": {
+      "status": "error",
+      "message": "ما عرفت نقيس RAM: 'Format-List' is not recognized as an internal or external command,\noperable program or batch file.",
+      "free_mb": null,
+      "total_mb": null
+    },
+    "agents": {
+      "status": "warning",
+      "message": "⚠️ لا توجد عمليات وكلاء/agents قيد التشغيل (python/node/hermes)",
+      "count": 0,
+      "pids": []
+    },
+    "disk": {
+      "status": "ok",
+      "message": "مساحة القرص كافية: 29.0GB حرة (14.0% free) من 207.1GB إجمالي",
+      "free_gb": 29.0,
+      "total_gb": 207.14285714285714,
+      "use_percent": 86.0,
+      "free_percent": 14.0
+    },
+    "git": {
+      "status": "warning",
+      "message": "⚠️ 7 change(s) غي ri ماضية في الـ Git:\n  M _test_supabase.py\n  M site/last-updated.json\n  M site/static-data/live-db.json\n  ?? cron_results/\n  ?? cron_results_20260907_1713.json\n  ?? sync_cron_to_supabase.py\n  ?? system_health_check.py",
+      "changes": [
+        {
+          "status": "M",
+          "file": "_test_supabase.py"
+        },
+        {
+          "status": "M",
+          "file": "site/last-updated.json"
+        },
+        {
+          "status": "M",
+          "file": "site/static-data/live-db.json"
+        },
+        {
+          "status": "??",
+          "file": "cron_results/"
+        },
+        {
+          "status": "??",
+          "file": "cron_results_20260907_1713.json"
+        },
+        {
+          "status": "??",
+          "file": "sync_cron_to_supabase.py"
+        },
+        {
+          "status": "??",
+          "file": "system_health_check.py"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "timestamp": "2026-09-08T18:07:39.807410+03:00",
+  "kuwait_time": "2026-09-08 18:07",
+  "checks": {
+    "docker": {
+      "status": "stopped",
+      "alert": true
+    },
+    "ram": {
+      "free_mb": 0,
+      "total_mb": 0,
+      "free_percent": 0,
+      "alert": null,
+      "threshold_mb": 500
+    },
+    "hermes_agents": {
+      "processes_found": true,
+      "alert": false
+    },
+    "disk": {
+      "path": "C:/Users/hello",
+      "free_gb": 29.81,
+      "total_gb": 210.35,
+      "free_percent": 14.2,
+      "alert": false,
+      "threshold_pct": 10
+    },
+    "git_alforaijboard": {
+      "repo": "alforaijboard-gh",
+      "branch": "main",
+      "modified_files": [
+        "site/last-updated.json",
+        "site/static-data/live-db.json"
+      ],
+      "untracked_files": [
+        "_supabase_check.py",
+        "cron_results/",
+        "cron_results_20260907_1713.json",
+        "sync_cron_to_supabase.py",
+        "system_health_check.py"
+      ],
+      "alert": true
+    }
+  },
+  "summary": "2 alert(s): Docker daemon not running; Git dirty: 2 modified + 5 untracked files",
+  "alerts_count": 2
+}

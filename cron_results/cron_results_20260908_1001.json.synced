@@ -1,0 +1,74 @@
+{
+  "timestamp": "2026-09-08T10:01:18+03:00",
+  "checks": {
+    "docker": {
+      "status": "healthy",
+      "detail": "Docker daemon running, no containers active",
+      "containers_running": 0
+    },
+    "ram": {
+      "status": "healthy",
+      "detail": "1.72 GB available out of 16.0 GB total (89.3% used — but still above threshold)",
+      "available_mb": 1759,
+      "threshold_mb": 500,
+      "pass": true
+    },
+    "hermes_agents": {
+      "status": "healthy",
+      "detail": "Hermes gateway + agents all running",
+      "gateway_running": true,
+      "agents_found": 8,
+      "processes": [
+        {"pid": 14104, "name": "hermes_cli.main serve", "role": "Hermes gateway/server"},
+        {"pid": 8132, "name": "hermes_cli.main serve", "role": "Hermes gateway (duplicate instance)"},
+        {"pid": 576, "name": "@modelcontextprotocol/server-github", "role": "GitHub MCP server"},
+        {"pid": 14396, "name": "@modelcontextprotocol/server-github (npx)", "role": "GitHub MCP server (launching)"},
+        {"pid": 14932, "name": "@playwright/mcp (npx)", "role": "Playwright MCP server"},
+        {"pid": 14936, "name": "@playwright/mcp", "role": "Playwright MCP server (running)"},
+        {"pid": 11272, "name": "browser_harness.daemon", "role": "Browser-use daemon"},
+        {"pid": 24592, "name": "browser_harness.daemon", "role": "Browser-use daemon (duplicate)"}
+      ]
+    },
+    "disk": {
+      "status": "warning",
+      "detail": "23 GB free out of 196 GB total (11.7% free — borderline, approaching 10% threshold)",
+      "free_gb": 23,
+      "total_gb": 196,
+      "use_percent": 89,
+      "free_percent": 11.7,
+      "threshold_percent": 90,
+      "pass": true,
+      "near_limit": true,
+      "alert": "Free space at 11.7% — below 12% margin. Recommend cleanup within 24h."
+    },
+    "git": {
+      "status": "warning",
+      "detail": "3 modified files + 3 untracked files, working tree dirty",
+      "modified": ["_test_supabase.py", "site/last-updated.json", "site/static-data/live-db.json"],
+      "untracked": ["cron_results/", "cron_results_20260907_1713.json", "sync_cron_to_supabase.py"],
+      "branch": "main",
+      "synced_with_remote": true,
+      "uncommitted_changes": true,
+      "action": "Review and commit modified files; decide on untracked files"
+    },
+    "supabase_logging": {
+      "status": "failed",
+      "detail": ".env file missing — cannot connect to Supabase cron_results table",
+      "saved_locally": true,
+      "local_path": "cron_results/cron_results_20260908_1001.json",
+      "note": ".env must be restored for Supabase logging to work"
+    }
+  },
+  "summary": "3 healthy, 2 warnings, 1 failed",
+  "healthy_count": 3,
+  "warning_count": 2,
+  "critical_count": 0,
+  "failed_count": 1,
+  "notes": [
+    "RAM dipped from 2.6GB to 1.72GB since last check but still safe (+1.2GB above threshold)",
+    "Hermes agents recovered — 8 processes running including gateway, GitHub MCP, Playwright MCP, browser daemon",
+    "Disk unchanged at 11.7% free — persistent warning, needs attention",
+    "Git repo unchanged since last check — same 3 modified + 3 untracked files",
+    "Supabase logging still failing due to missing .env"
+  ]
+}

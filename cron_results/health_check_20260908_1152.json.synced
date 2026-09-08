@@ -1,0 +1,101 @@
+{
+  "timestamp": "2026-09-08T11:52:39.686912+00:00",
+  "timestamp_short": "20260908_1152",
+  "overall_status": "error",
+  "summary": "ALERT: docker: error — Docker daemon غير متاح — خدمة Docker Desktop ليست نشطة\nALERT: git: warning — 7 تغيير(g) غير ماضية في الـ Git",
+  "duration_ms": 1669,
+  "checks": {
+    "docker": {
+      "status": "error",
+      "message": "Docker daemon غير متاح — خدمة Docker Desktop ليست نشطة",
+      "containers": 0
+    },
+    "ram": {
+      "status": "ok",
+      "message": "RAM حرة كافية: 8209MB / 16263MB (50.5%)",
+      "free_mb": 8208.8,
+      "total_mb": 16263.4
+    },
+    "agents": {
+      "status": "ok",
+      "message": "8 عملية من عمليات الوكلاء/agents شغالة",
+      "count": 8,
+      "pids": [
+        {
+          "pid": 17448,
+          "name": "node"
+        },
+        {
+          "pid": 17512,
+          "name": "node"
+        },
+        {
+          "pid": 17956,
+          "name": "node"
+        },
+        {
+          "pid": 17964,
+          "name": "node"
+        },
+        {
+          "pid": 14156,
+          "name": "python"
+        },
+        {
+          "pid": 16288,
+          "name": "python"
+        },
+        {
+          "pid": 16344,
+          "name": "python"
+        },
+        {
+          "pid": 17984,
+          "name": "python"
+        }
+      ]
+    },
+    "disk": {
+      "status": "ok",
+      "message": "مساحة القرص كافية: 30.5GB حرة (14.5% free) من 210.3GB",
+      "free_gb": 30.5,
+      "total_gb": 210.3,
+      "use_percent": 85.5,
+      "free_percent": 14.5
+    },
+    "git": {
+      "status": "warning",
+      "message": "7 تغيير(g) غير ماضية في الـ Git",
+      "changes": [
+        {
+          "status": "M",
+          "file": "_test_supabase.py"
+        },
+        {
+          "status": "M",
+          "file": "site/last-updated.json"
+        },
+        {
+          "status": "M",
+          "file": "site/static-data/live-db.json"
+        },
+        {
+          "status": "??",
+          "file": "cron_results/"
+        },
+        {
+          "status": "??",
+          "file": "cron_results_20260907_1713.json"
+        },
+        {
+          "status": "??",
+          "file": "sync_cron_to_supabase.py"
+        },
+        {
+          "status": "??",
+          "file": "system_health_check.py"
+        }
+      ]
+    }
+  }
+}

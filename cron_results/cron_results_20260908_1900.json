@@ -1,0 +1,56 @@
+{
+  "check_at": "2026-09-08T19:00:00Z",
+  "cron_job": "system_health_check / hour",
+  "location": "Kuwait Time (UTC+3)",
+  "results": {
+    "docker": {
+      "status": "RUNNING_AFTER_RESTART",
+      "details": "Docker Desktop was not running at start of check. Launched via Start-Process. Verified healthy: docker ps returns empty container list (daemon API responds).",
+      "action_taken": "Started Docker Desktop automatically (no containers affected — none were running).",
+      "severity": "WARNING_RESOLVED"
+    },
+    "ram": {
+      "status": "OK",
+      "free_mb": 7597,
+      "total_mb": 16653,
+      "free_percent": 45.6,
+      "threshold_mb": 500,
+      "severity": "OK"
+    },
+    "agents": {
+      "status": "ALL_RUNNING",
+      "details": "9 Hermes.exe processes + multiple python.exe + node.exe all alive. No critical agent missing.",
+      "counts": {
+        "hermes": 9,
+        "python": 4,
+        "node": 7
+      },
+      "severity": "OK"
+    },
+    "disk": {
+      "status": "CAUTION",
+      "path": "C:/Users/hello",
+      "total_gb": 196,
+      "used_gb": 169,
+      "free_gb": 28,
+      "free_percent": 14.3,
+      "threshold_percent": 10,
+      "severity": "WARNING"
+    },
+    "git": {
+      "status": "UNCOMMITTED_CHANGES",
+      "repo": "alforaijboard-gh",
+      "modified_files": [
+        "_test_supabase.py",
+        "site/last-updated.json",
+        "site/static-data/live-db.json"
+      ],
+      "untracked_files_count": 16,
+      "note": "Modified files: last-updated.json and live-db.json are site data files (normal during sync). _test_supabase.py is a test artifact.",
+      "severity": "INFO"
+    }
+  },
+  "summary": "System operational. Docker self-healed via auto-restart. Disk approaching warning zone. Git has uncommitted site data files (expected during sync). No critical agent downtime.",
+  "performed_by": "hermes-cron / system_health_check.py",
+  "timestamp_iso": "2026-09-08T19:00:00Z"
+}

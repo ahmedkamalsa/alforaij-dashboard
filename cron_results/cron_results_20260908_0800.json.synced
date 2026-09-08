@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-09-08T08:00:00+03:00",
+  "checks": {
+    "docker": {
+      "status": "healthy",
+      "detail": "Docker daemon running, no containers active",
+      "containers_running": 0
+    },
+    "ram": {
+      "status": "healthy",
+      "detail": "2.6 GB available out of 15.9 GB total (83.5% used)",
+      "available_gb": 2.6,
+      "threshold_gb": 0.5,
+      "pass": true
+    },
+    "hermes_agents": {
+      "status": "warning",
+      "detail": "No Hermes agent or gateway processes found via ps",
+      "gateway_reachable": false,
+      "agents_found": 0,
+      "expected": "gateway PID 1596 (per memory) and 5 agent PIDs",
+      "action": "Check if Hermes orchestrator service is still running; PID 1596 may have exited"
+    },
+    "disk": {
+      "status": "warning",
+      "detail": "23 GB free out of 196 GB total (89% used, 11.7% free)",
+      "free_gb": 23,
+      "total_gb": 196,
+      "use_percent": 89,
+      "threshold_percent": 90,
+      "pass": true,
+      "near_limit": true
+    },
+    "git": {
+      "status": "warning",
+      "detail": "3 modified files + untracked files, diverged from remote by 1 commit",
+      "modified": ["_test_supabase.py", "site/last-updated.json", "site/static-data/live-db.json"],
+      "untracked": ["cron_results/", "cron_results_20260907_1713.json", "sync_cron_to_supabase.py"],
+      "ahead_remote": 1,
+      "uncommitted_changes": true,
+      "action": "Review and commit or stash changes"
+    },
+    "supabase_logging": {
+      "status": "failed",
+      "detail": ".env file missing — cannot connect to Supabase cron_results table",
+      "saved_locally": true,
+      "local_path": "cron_results/cron_results_20260908_0800.json"
+    }
+  },
+  "summary": "2 healthy, 3 warnings, 1 failed",
+  "healthy_count": 2,
+  "warning_count": 3,
+  "critical_count": 0,
+  "failed_count": 1
+}

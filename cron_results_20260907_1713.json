@@ -1,0 +1,38 @@
+{
+  "timestamp": "2026-09-07T17:13:21+03:00",
+  "status": "needs_attention",
+  "checks": {
+    "docker": {
+      "status": "down",
+      "message": "Docker daemon not running (npipe connection failed). Manual restart required — cron lacks admin rights."
+    },
+    "ram": {
+      "status": "ok",
+      "free_mb": 3581,
+      "threshold_mb": 500
+    },
+    "hermes_agents": {
+      "status": "ok",
+      "processes_count": 5,
+      "pids": [10736, 11844, 16268, 15808, 12852]
+    },
+    "disk_c": {
+      "status": "ok",
+      "used_gb": 168,
+      "total_gb": 196,
+      "free_gb": 29,
+      "free_percent": 14.8,
+      "threshold_percent": 10
+    },
+    "git_alforaijboard": {
+      "status": "modified_files",
+      "branch": "main",
+      "uncommitted": ["_test_supabase.py", "site/last-updated.json", "site/static-data/live-db.json"],
+      "ahead_behind": "up to date with origin/main"
+    }
+  },
+  "supabase_log": {
+    "success": false,
+    "reason": ".env file missing — no credentials available to write to cron_results table"
+  }
+}

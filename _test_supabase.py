@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """Quick test: fetch count + 1 sample from Supabase market_listings."""
-import json, urllib.request, ssl, sys
+import json, os, urllib.request, ssl, sys
 
 PROJECT = "https://bwspcsiazbwrrxpgoldx.supabase.co"
 BASE = PROJECT + "/rest/v1"

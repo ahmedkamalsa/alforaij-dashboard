@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-09-08T18:09:27.371839+03:00",
+  "kuwait_time": "2026-09-08 18:09",
+  "checks": {
+    "docker": {
+      "status": "running",
+      "alert": false
+    },
+    "ram": {
+      "free_mb": 7641.6,
+      "total_mb": 16263.4,
+      "free_percent": 47.0,
+      "alert": false,
+      "threshold_mb": 500
+    },
+    "hermes_agents": {
+      "processes_found": true,
+      "alert": false
+    },
+    "disk": {
+      "path": "C:/Users/hello",
+      "free_gb": 29.81,
+      "total_gb": 210.35,
+      "free_percent": 14.2,
+      "alert": false,
+      "threshold_pct": 10
+    },
+    "git_alforaijboard": {
+      "repo": "alforaijboard-gh",
+      "branch": "main",
+      "modified_files": [],
+      "untracked_files": [
+        "_supabase_check.py",
+        "cron_results/",
+        "cron_results_20260907_1713.json",
+        "sync_cron_to_supabase.py",
+        "system_health_check.py"
+      ],
+      "alert": true
+    }
+  },
+  "alerts_count": 1,
+  "summary": "1 alert(s): Git dirty: 0 modified + 5 untracked"
+}

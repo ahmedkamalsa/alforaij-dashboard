@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-09-08T11:00:00+03:00",
+  "checks": {
+    "docker": {
+      "status": "healthy",
+      "detail": "Docker daemon running, no containers active",
+      "containers_running": 0
+    },
+    "ram": {
+      "status": "healthy",
+      "detail": "1177 MB free out of 16.0 GB total (7.1% free — above 500MB threshold but low utilization)",
+      "available_mb": 1177,
+      "total_mb": 16654,
+      "threshold_mb": 500,
+      "pass": true
+    },
+    "hermes_agents": {
+      "status": "critical",
+      "detail": "NO Hermes processes found running — gateway, MCP servers, and browser daemon all stopped",
+      "gateway_running": false,
+      "agents_found": 0,
+      "processes": [],
+      "alert": "CRITICAL: All Hermes agent processes are down. Orchestrator is non-functional.",
+      "action": "Restart Hermes orchestrator immediately"
+    },
+    "disk": {
+      "status": "warning",
+      "detail": "23 GB free out of 196 GB total (11.7% free — borderline, approaching 10% threshold)",
+      "free_gb": 23,
+      "total_gb": 196,
+      "use_percent": 89,
+      "free_percent": 11.7,
+      "threshold_percent": 90,
+      "pass": true,
+      "near_limit": true,
+      "alert": "Free space at 11.7% — below 12% margin. Recommend cleanup within 24h."
+    },
+    "git": {
+      "status": "warning",
+      "detail": "3 modified files + 3 untracked files, working tree dirty",
+      "modified": ["_test_supabase.py", "site/last-updated.json", "site/static-data/live-db.json"],
+      "untracked": ["cron_results/", "cron_results_20260907_1713.json", "sync_cron_to_supabase.py"],
+      "branch": "main",
+      "synced_with_remote": true,
+      "uncommitted_changes": true,
+      "action": "Review and commit modified files; decide on untracked files"
+    },
+    "supabase_logging": {
+      "status": "failed",
+      "detail": ".env file missing — cannot connect to Supabase cron_results table",
+      "saved_locally": true,
+      "local_path": "cron_results/cron_results_20260908_1100.json",
+      "note": ".env must be restored for Supabase logging to work"
+    }
+  },
+  "summary": "2 healthy, 2 warnings, 1 critical, 1 failed",
+  "healthy_count": 2,
+  "warning_count": 2,
+  "critical_count": 1,
+  "failed_count": 1,
+  "notes": [
+    "Hermes orchestrator is DOWN — zero agent processes running. This is the primary critical issue.",
+    "RAM at 1177 MB free — adequate margin above 500MB threshold but system-wide utilization is low (7.1%)",
+    "Docker daemon healthy — no containers running, but daemon is alive and ready",
+    "Disk unchanged at 11.7% free — persistent warning from previous checks, still above 10% floor",
+    "Git repo unchanged — same 3 modified + 3 untracked files as previous check",
+    "Supabase logging still failing — .env file missing since 2026-09-06"
+  ]
+}

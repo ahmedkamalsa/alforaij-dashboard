@@ -1,0 +1,41 @@
+{
+  "check_time": "2026-09-07T17:26:08Z",
+  "kuwait_time": "2026-09-07 17:26",
+  "docker": {
+    "status": "running",
+    "containers": 0,
+    "note": "Daemon active, no containers running"
+  },
+  "ram": {
+    "free_gb": 1.47,
+    "total_gb": 15.88,
+    "free_percent": 9.3,
+    "health": "OK",
+    "threshold_mb": 500
+  },
+  "disk_c": {
+    "free_gb": 25,
+    "total_gb": 196,
+    "free_percent": 12.8,
+    "health": "OK",
+    "note": "Approaching warning threshold (<10% would trigger alert)"
+  },
+  "hermes_agents": {
+    "count": 5,
+    "pids": [10736, 11844, 16268, 15808, 12852],
+    "health": "OK"
+  },
+  "git_alforaijboard": {
+    "status": "dirty",
+    "modified": ["_test_supabase.py", "site/last-updated.json", "site/static-data/live-db.json"],
+    "untracked": ["cron_results_20260907_1713.json"],
+    "health": "ALERT",
+    "note": "3 modified files + 1 untracked — commit or stash advised"
+  },
+  "supabase_availability": {
+    "env_file_present": false,
+    "notes": ".env missing — cannot write to cron_results table"
+  },
+  "overall_health": "OK_with_warnings",
+  "warnings": ["git_dirty", "low_disk_free_12.8_percent"]
+}

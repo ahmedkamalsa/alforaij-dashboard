@@ -1,0 +1,15 @@
+{
+  "timestamp": "2026-09-07T21:34:06Z",
+  "kuwait_time": "2026-09-07 21:34",
+  "checks": {
+    "docker": { "status": "running", "containers": 0, "alert": false },
+    "ram": { "free_mb": 2949, "total_mb": 16263, "free_percent": 18.1, "alert": true, "threshold": "500MB" },
+    "hermes_agents": { "processes_found": true, "count": "running", "alert": false },
+    "disk": { "path": "C:/Users/hello", "free_gb": 25, "total_gb": 196, "free_percent": 12.8, "alert": true, "threshold": "10%" },
+    "git": { "repo": "alforaijboard-gh", "branch": "main", "modified": ["_test_supabase.py", "site/last-updated.json", "site/static-data/live-db.json"], "untracked": ["cron_results/", "cron_results_20260907_1713.json"], "alert": true }
+  },
+  "summary": "2 alerts: RAM below 500MB (2.95GB free), Disk 12.8% free on C: drive. Git has 3 modified + 2 untracked files.",
+  "supabase_status": "unreachable",
+  "reason": "Missing .env file - no Supabase API keys available",
+  "saved_locally": "/c/Users/hello/alforaijboard-gh/cron_results/cron_results_20260907_2134.json"
+}

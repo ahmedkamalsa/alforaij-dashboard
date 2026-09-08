@@ -1,0 +1,51 @@
+{
+  "timestamp_kt": "2026-09-08 05:58:31",
+  "timestamp_file": "20260908_0558",
+  "checks": {
+    "docker": {
+      "status": "RUNNING",
+      "detail": "Docker daemon active, zero containers",
+      "healthy": true
+    },
+    "ram": {
+      "free_mb": 1807.0,
+      "total_mb": 16263.4,
+      "free_gb": 1.76,
+      "total_gb": 15.88,
+      "threshold_mb": 500,
+      "status": "OK",
+      "healthy": true
+    },
+    "hermes_agents": {
+      "running": false,
+      "detail": "WARNING: No Hermes/node/python processes found — orchestrator likely stopped",
+      "critical": true,
+      "healthy": false
+    },
+    "disk": {
+      "total_gb": 196,
+      "free_gb": 23,
+      "used_percent": 89,
+      "free_percent": 11,
+      "threshold_percent": 10,
+      "status": "OK",
+      "healthy": true
+    },
+    "git_alforaijboard": {
+      "dirty": true,
+      "modified": [
+        "_test_supabase.py",
+        "site/last-updated.json",
+        "site/static-data/live-db.json"
+      ],
+      "untracked": [
+        "cron_results/",
+        "cron_results_20260907_1713.json",
+        "sync_cron_to_supabase.py"
+      ],
+      "detail": "3 modified + 3 untracked — needs commit",
+      "healthy": false
+    }
+  },
+  "summary": "2 OK, 1 WARN (RAM 1.81GB), 1 CRITICAL (Hermes agents stopped), 1 ALERT (disk 11% free), 1 DIRTY (Git)"
+}
